@@ -1,0 +1,23 @@
+--create .\project.lib
+.\startup_stm32g030xx.o
+.\main.o
+.\gpio.o
+.\stm32g0xx_it.o
+.\stm32g0xx_hal_msp.o
+.\stm32g0xx_hal_tim.o
+.\stm32g0xx_hal_tim_ex.o
+.\stm32g0xx_hal_rcc.o
+.\stm32g0xx_hal_rcc_ex.o
+.\stm32g0xx_ll_rcc.o
+.\stm32g0xx_hal_flash.o
+.\stm32g0xx_hal_flash_ex.o
+.\stm32g0xx_hal_gpio.o
+.\stm32g0xx_hal_dma.o
+.\stm32g0xx_hal_dma_ex.o
+.\stm32g0xx_ll_dma.o
+.\stm32g0xx_hal_pwr.o
+.\stm32g0xx_hal_pwr_ex.o
+.\stm32g0xx_hal_cortex.o
+.\stm32g0xx_hal.o
+.\stm32g0xx_hal_exti.o
+.\system_stm32g0xx.o
