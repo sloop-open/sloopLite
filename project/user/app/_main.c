@@ -32,7 +32,7 @@ int _main(void)
   sloop_init();
 
   /* 跳转到第一个任务 */
-  sys_goto(task_baseInit);
+  sl_goto(task_baseInit);
 
   while (1)
   {

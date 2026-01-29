@@ -28,7 +28,7 @@
 /* ============================================================== */
 
 /* ∆Ù”√RTT¥Ú”° */
-#define SYS_RTT_ENABLE 1
+#define SL_RTT_ENABLE 1
 
 #endif /* __bl_config_H */
 

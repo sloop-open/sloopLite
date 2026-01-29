@@ -70,7 +70,7 @@
 void NMI_Handler(void)
 {
   /* USER CODE BEGIN NonMaskableInt_IRQn 0 */
-  sys_error("A NMI_IRQ occurred.");
+  sl_error("A NMI_IRQ occurred.");
   /* USER CODE END NonMaskableInt_IRQn 0 */
   /* USER CODE BEGIN NonMaskableInt_IRQn 1 */
    while (1)
@@ -85,8 +85,8 @@ void NMI_Handler(void)
 void HardFault_Handler(void)
 {
   /* USER CODE BEGIN HardFault_IRQn 0 */
-  sys_error("A HardFault_IRQ occurred.");
-  sys_error("It may be that the function pointer is not initialized, resulting in NULL pointer dereference.");
+  sl_error("A HardFault_IRQ occurred.");
+  sl_error("It may be that the function pointer is not initialized, resulting in NULL pointer dereference.");
 
   /*
   下面的这些地址是从栈中解析出的疑似出错前的函数调用关系。
@@ -101,7 +101,7 @@ void HardFault_Handler(void)
 
   uint32_t *stack = (uint32_t *)msp;
 
-  sys_prt_brYellow("The following addresses are the function call relationships before suspected error parsed from the stack.");
+  sl_prt_brYellow("The following addresses are the function call relationships before suspected error parsed from the stack.");
 
   /* 按深度检索栈 */
   int len = 64;
@@ -111,7 +111,7 @@ void HardFault_Handler(void)
   {
     if ((stack[i] & 0xFFF00000) == FLASH_BASE)
     {
-      sys_prt_brWhite("%d: 0x%08x", ++count, stack[i]);
+      sl_prt_brWhite("%d: 0x%08x", ++count, stack[i]);
     }
   }
 
@@ -129,7 +129,7 @@ void HardFault_Handler(void)
 void SVC_Handler(void)
 {
   /* USER CODE BEGIN SVC_IRQn 0 */
-  sys_error("A SVC_IRQ occurred.");
+  sl_error("A SVC_IRQ occurred.");
   /* USER CODE END SVC_IRQn 0 */
   /* USER CODE BEGIN SVC_IRQn 1 */
 
@@ -142,7 +142,7 @@ void SVC_Handler(void)
 void PendSV_Handler(void)
 {
   /* USER CODE BEGIN PendSV_IRQn 0 */
-  sys_error("A PendSV_IRQ occurred.");
+  sl_error("A PendSV_IRQ occurred.");
   /* USER CODE END PendSV_IRQn 0 */
   /* USER CODE BEGIN PendSV_IRQn 1 */
 

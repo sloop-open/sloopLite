@@ -13,7 +13,7 @@
 #define check_task_not_null()          \
     if (task == NULL)                  \
     {                                  \
-        sys_error("The task is null"); \
+        sl_error("The task is null"); \
         return;                        \
     }
 
@@ -62,23 +62,23 @@ static int loop_us;
 /* sloop 系统初始化 */
 void sloop_init(void)
 {
-    sys_prt_brYellow("==================================");
-    sys_prt_brYellow("========= sloop  (^-^) ==========");
-    sys_prt_brYellow("==================================");
+    sl_prt_brYellow("==================================");
+    sl_prt_brYellow("========= sloop  (^-^) ==========");
+    sl_prt_brYellow("==================================");
 
     /* 启用单次任务 */
-    sys_task_start(once_task_run);
+    sl_task_start(once_task_run);
 
     /* 启动 loop 计数 */
-    sys_task_start(loop_counter);
+    sl_task_start(loop_counter);
 
     /* 启动 cpu 负载计算 */
-    sys_cycle_start(100, calcul_cpu_load);
+    sl_cycle_start(100, calcul_cpu_load);
 
     /* 启用系统心跳 */
-    sys_cycle_start(1000, system_heartbeat);
+    sl_cycle_start(1000, system_heartbeat);
 
-    sys_prt_withFunc("system heartbeat start");
+    sl_prt_withFunc("system heartbeat start");
 }
 
 /* sloop 系统运行 */
@@ -99,7 +99,7 @@ void mcu_tick_irq(void)
     tick++;
 
     /* 软件定时器 1ms 启动一次 */
-    sys_task_once(soft_timer);
+    sl_task_once(soft_timer);
 }
 
 /* 软件定定时器 */
@@ -124,7 +124,7 @@ void system_heartbeat(void)
 
     SEGGER_RTT_SetTerminal(1);
 
-    sys_prt_var(count);
+    sl_prt_var(count);
 
     SEGGER_RTT_SetTerminal(0);
 
@@ -161,7 +161,7 @@ void calcul_cpu_load(void)
     {
         if (load > 800)
         {
-            sys_cycle_start(1000, load_warning);
+            sl_cycle_start(1000, load_warning);
 
             warning = 1;
         }
@@ -172,7 +172,7 @@ void calcul_cpu_load(void)
     /* 解除警告 */
     if (load < 600)
     {
-        sys_cycle_stop(load_warning);
+        sl_cycle_stop(load_warning);
 
         warning = 0;
     }
@@ -181,19 +181,19 @@ void calcul_cpu_load(void)
 /* 负载警告 */
 void load_warning(void)
 {
-    sys_error("cpu load over 80%%, reach %2d.%d%%, average loop time: %d.%d us", load / 10, load % 10, loop_us / 10, loop_us % 10);
+    sl_error("cpu load over 80%%, reach %2d.%d%%, average loop time: %d.%d us", load / 10, load % 10, loop_us / 10, loop_us % 10);
 }
 
 /* ============================================================== */
 
 /* 获取时间戳 */
-uint32_t sys_get_tick(void)
+uint32_t sl_get_tick(void)
 {
     return tick;
 }
 
 /* 阻塞式延时 */
-void sys_delay(int ms)
+void sl_delay(int ms)
 {
     uint32_t tick_start = tick;
 
@@ -254,7 +254,7 @@ void timeout_run(void)
 }
 
 /* 超时任务 */
-void sys_timeout_start(int ms, pfunc task)
+void sl_timeout_start(int ms, pfunc task)
 {
     check_task_not_null();
 
@@ -287,10 +287,10 @@ void sys_timeout_start(int ms, pfunc task)
         }
     }
 
-    sys_error("timeout task overflow, limit %2d", TIMEOUT_LIMIT);
+    sl_error("timeout task overflow, limit %2d", TIMEOUT_LIMIT);
 }
 
-void sys_timeout_stop(pfunc task)
+void sl_timeout_stop(pfunc task)
 {
     check_task_not_null();
 
@@ -351,7 +351,7 @@ void cycle_run(void)
 }
 
 /* 周期任务 */
-void sys_cycle_start(int ms, pfunc task)
+void sl_cycle_start(int ms, pfunc task)
 {
     check_task_not_null();
 
@@ -388,10 +388,10 @@ void sys_cycle_start(int ms, pfunc task)
         }
     }
 
-    sys_error("cycle task overflow, limit %2d", CYCLE_LIMIT);
+    sl_error("cycle task overflow, limit %2d", CYCLE_LIMIT);
 }
 
-void sys_cycle_stop(pfunc task)
+void sl_cycle_stop(pfunc task)
 {
     check_task_not_null();
 
@@ -462,7 +462,7 @@ void multiple_run(void)
 }
 
 /* 多次任务 */
-void sys_multiple_start(int num, int ms, pfunc task)
+void sl_multiple_start(int num, int ms, pfunc task)
 {
     check_task_not_null();
 
@@ -513,10 +513,10 @@ void sys_multiple_start(int num, int ms, pfunc task)
         }
     }
 
-    sys_error("multiple task overflow, limit %2d", MULTIPLE_LIMIT);
+    sl_error("multiple task overflow, limit %2d", MULTIPLE_LIMIT);
 }
 
-void sys_multiple_stop(pfunc task)
+void sl_multiple_stop(pfunc task)
 {
     check_task_not_null();
 
@@ -550,7 +550,7 @@ void parallel_task_run(void)
 }
 
 /* 并行任务 */
-void sys_task_start(pfunc task)
+void sl_task_start(pfunc task)
 {
     check_task_not_null();
 
@@ -572,10 +572,10 @@ void sys_task_start(pfunc task)
         }
     }
 
-    sys_error("parallel task overflow, limit %2d", PARALLEL_TASK_LIMIT);
+    sl_error("parallel task overflow, limit %2d", PARALLEL_TASK_LIMIT);
 }
 
-void sys_task_stop(pfunc task)
+void sl_task_stop(pfunc task)
 {
     check_task_not_null();
 
@@ -621,7 +621,7 @@ void once_task_run(void)
 }
 
 /* 单次任务 */
-void sys_task_once(pfunc task)
+void sl_task_once(pfunc task)
 {
     check_task_not_null();
 
@@ -652,7 +652,7 @@ void sys_task_once(pfunc task)
         }
     }
 
-    sys_error("once task overflow, limit %2d", ONCE_TASK_LIMIT);
+    sl_error("once task overflow, limit %2d", ONCE_TASK_LIMIT);
 }
 
 /* ============================================================== */
@@ -664,14 +664,14 @@ static pfunc run_task;
 static pfunc pre_task;
 
 /* 互斥任务切换 */
-void sys_goto(pfunc task)
+void sl_goto(pfunc task)
 {
     check_task_not_null();
 
     if (wait)
     {
         /* 切换任务，强制中断等待 */
-        sys_wait_break();
+        sl_wait_break();
     }
 
     /* 第一次未加载过任务，则特殊处理 */
@@ -690,7 +690,7 @@ void sys_goto(pfunc task)
 }
 
 /* 加载新任务 */
-void sys_load_new_task(void)
+void sl_load_new_task(void)
 {
     run_task = pre_task;
 }
@@ -710,11 +710,11 @@ static volatile char break_wait;
 static volatile char _continue;
 
 /* 非阻塞等待延时到达（只能在互斥任务中使用） */
-char sys_wait(int ms)
+char sl_wait(int ms)
 {
     if (wait)
     {
-        sys_error("sys_wait cannot be called nested");
+        sl_error("sl_wait cannot be called nested");
 
         return 1;
     }
@@ -767,11 +767,11 @@ char sys_wait(int ms)
 }
 
 /* 非阻塞裸等待，直到 break or continue */
-char sys_wait_bare(void)
+char sl_wait_bare(void)
 {
     if (wait)
     {
-        sys_error("sys_wait_bare cannot be called nested");
+        sl_error("sl_wait_bare cannot be called nested");
 
         return 1;
     }
@@ -816,25 +816,25 @@ char sys_wait_bare(void)
 }
 
 /* 获取等待状态 */
-char sys_is_waiting(void)
+char sl_is_waiting(void)
 {
     return wait;
 }
 
 /* 中断等待 */
-void sys_wait_break(void)
+void sl_wait_break(void)
 {
     break_wait = 1;
 
-    sys_printf("break wait");
+    sl_printf("break wait");
 }
 
 /* 忽略等待，会继续执行等待后的操作 */
-void sys_wait_continue(void)
+void sl_wait_continue(void)
 {
     _continue = 1;
 
-    sys_printf("ignore wait and continue");
+    sl_printf("ignore wait and continue");
 }
 
 /************************** END OF FILE **************************/
