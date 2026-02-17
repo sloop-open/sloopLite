@@ -453,7 +453,7 @@ void multiple_run(void)
             multiple_reg[i].num--;
 
             /* 运行次数到达，停止 */
-            if (backup_reg[i].num == 0)
+            if (multiple_reg[i].num == 0)
             {
                 multiple_reg[i].callback = NULL;
             }
