@@ -98,7 +98,7 @@ void print_null(const char *sFormat, ...);
 #define sl_prt_str(str) sl_prt_withFunc("%s", str)
 
 /* 打印浮点数 */
-#define sl_prt_float(var) sl_prt_withFunc(#var " = %d.%2d", (int)var, (int)(var * 1000) % 1000)
+#define sl_prt_float(var) sl_prt_withFunc(#var " = %d.%02d", (int)var, abs((int)(var * 100) % 100))
 
 /* 连续打印（末尾不带换行），用于不换行连续输出 */
 #define sl_prt_noNewLine(sFormat, ...) SEGGER_RTT_printf(0, RTT_CTRL_TEXT_YELLOW sFormat RTT_CTRL_RESET, ##__VA_ARGS__, __func__)
