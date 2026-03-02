@@ -81,7 +81,7 @@
           </BeforeMake>
           <AfterMake>
             <RunUserProg1>0</RunUserProg1>
-            <RunUserProg2>0</RunUserProg2>
+            <RunUserProg2>1</RunUserProg2>
             <UserProg1Name></UserProg1Name>
             <UserProg2Name></UserProg2Name>
             <UserProg1Dos16Mode>0</UserProg1Dos16Mode>
@@ -340,7 +340,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32G030xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../Drivers/STM32G0xx_HAL_Driver/Inc;../Drivers/STM32G0xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32G0xx/Include;../Drivers/CMSIS/Include;..\user\app;..\user\app\config;..\user\app\module;..\user\app\tasks;..\user\sloop;..\user\sloop\kernel;..\user\sloop\RTT</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32G0xx_HAL_Driver/Inc;../Drivers/STM32G0xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32G0xx/Include;../Drivers/CMSIS/Include;../user/app;../user/app/config;../user/app/module;../user/app/tasks;../user/sloop;../user/sloop/kernel;../user/sloop/RTT</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -420,16 +420,6 @@
           <GroupName>Drivers/STM32G0xx_HAL_Driver</GroupName>
           <Files>
             <File>
-              <FileName>stm32g0xx_hal_tim.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_hal_tim.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32g0xx_hal_tim_ex.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_hal_tim_ex.c</FilePath>
-            </File>
-            <File>
               <FileName>stm32g0xx_hal_rcc.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_hal_rcc.c</FilePath>
@@ -468,11 +458,6 @@
               <FileName>stm32g0xx_hal_dma_ex.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_hal_dma_ex.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32g0xx_ll_dma.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_ll_dma.c</FilePath>
             </File>
             <File>
               <FileName>stm32g0xx_hal_pwr.c</FileName>
