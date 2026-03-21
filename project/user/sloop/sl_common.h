@@ -74,7 +74,7 @@ void print_null(const char *sFormat, ...);
                                                    sl_get_tick() / 1000 / 60 % 60,                                                                         \
                                                    sl_get_tick() / 1000 % 60,                                                                              \
                                                    sl_get_tick() % 1000,                                                                                   \
-                                                   ##__VA_ARGS__, __func__)
+                                                   ##__VA_ARGS__)
 
 /* 带函数名的打印 */
 #define sl_prt_withFunc(sFormat, ...) sl_printf(sFormat RTT_CTRL_TEXT_GREEN " <func: %s>" RTT_CTRL_RESET, ##__VA_ARGS__, __func__)
