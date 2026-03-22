@@ -69,12 +69,12 @@ void print_null(const char *sFormat, ...);
 
 /* 系统打印（带时间戳），RTT 简化版本 */
 #define sl_printf(sFormat, ...) SEGGER_RTT_printf(0, RTT_CTRL_TEXT_GREEN "\n[%02d %02d:%02d:%02d.%03d] " RTT_CTRL_TEXT_YELLOW sFormat "\n" RTT_CTRL_RESET, \
-                                                   sl_get_tick() / 1000 / 60 / 60 / 24,                                                                    \
-                                                   sl_get_tick() / 1000 / 60 / 60 % 24,                                                                    \
-                                                   sl_get_tick() / 1000 / 60 % 60,                                                                         \
-                                                   sl_get_tick() / 1000 % 60,                                                                              \
-                                                   sl_get_tick() % 1000,                                                                                   \
-                                                   ##__VA_ARGS__)
+                                                  sl_get_tick() / 1000 / 60 / 60 / 24,                                                                     \
+                                                  sl_get_tick() / 1000 / 60 / 60 % 24,                                                                     \
+                                                  sl_get_tick() / 1000 / 60 % 60,                                                                          \
+                                                  sl_get_tick() / 1000 % 60,                                                                               \
+                                                  sl_get_tick() % 1000,                                                                                    \
+                                                  ##__VA_ARGS__)
 
 /* 带函数名的打印 */
 #define sl_prt_withFunc(sFormat, ...) sl_printf(sFormat RTT_CTRL_TEXT_GREEN " <func: %s>" RTT_CTRL_RESET, ##__VA_ARGS__, __func__)
@@ -113,9 +113,9 @@ extern char _free;
 void sl_load_new_task(void);
 
 /* 任务初始化宏 */
-#define _INIT                            \
-    if (_init == 1)                      \
-    {                                    \
+#define _INIT                           \
+    if (_init == 1)                     \
+    {                                   \
         sl_focus("enter %s", __func__); \
         _init = 0;
 
@@ -125,12 +125,52 @@ void sl_load_new_task(void);
     if (_free == 1) \
     {
 
-#define _RUN                        \
+#define _RUN                       \
     sl_focus("exit %s", __func__); \
     sl_load_new_task();            \
-    _init = 1;                      \
-    _free = 0;                      \
-    return;                         \
+    _init = 1;                     \
+    _free = 0;                     \
+    return;                        \
+    }
+
+/* ============================================================== */
+/* 有限状态机宏，语法糖。
+有非阻塞 fsm_wait，但不能与 sl_wait 混用，后者会阻塞状态机。
+并行任务延时场景用该宏，会简化状态机逻辑 */
+
+#define _FSM_START              \
+    static uint32_t fsm_state;  \
+    static uint32_t tick_start; \
+    switch (fsm_state)          \
+    {
+
+#define _CASE_START(id) \
+    case id:            \
+    {
+
+#define _CASE_END \
+    }             \
+    break;
+
+#define fsm_goto(id) \
+    fsm_state = id
+
+#define fsm_wait(ms)                                       \
+    tick_start = sl_get_tick();                            \
+    fsm_goto(__LINE__ + 2622);                             \
+    case __LINE__ + 2622:                                  \
+        if ((uint32_t)(sl_get_tick() - tick_start) < (ms)) \
+            break;
+
+#define _DEFAULT_START \
+    default:           \
+    {
+
+#define _DEFAULT_END \
+    }                \
+    break;
+
+#define _FSM_END \
     }
 
 #endif /* __bl_common_H */

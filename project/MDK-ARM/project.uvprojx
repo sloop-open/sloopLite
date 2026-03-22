@@ -519,6 +519,11 @@
               <FileType>1</FileType>
               <FilePath>..\user\app\tasks\task_idle.c</FilePath>
             </File>
+            <File>
+              <FileName>task_fsm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\user\app\tasks\task_fsm.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
