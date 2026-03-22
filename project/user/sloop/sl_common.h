@@ -155,10 +155,13 @@ void sl_load_new_task(void);
 #define fsm_goto(id) \
     fsm_state = id
 
+/* 用于隔离用户状态机 ID 与系统 ID */
+#define ID_OFFSET 2622
+
 #define fsm_wait(ms)                                       \
     tick_start = sl_get_tick();                            \
-    fsm_goto(__LINE__ + 2622);                             \
-    case __LINE__ + 2622:                                  \
+    fsm_goto(__LINE__ + ID_OFFSET);                        \
+    case __LINE__ + ID_OFFSET:                             \
         if ((uint32_t)(sl_get_tick() - tick_start) < (ms)) \
             break;
 
