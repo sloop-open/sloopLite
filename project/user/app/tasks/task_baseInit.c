@@ -13,7 +13,7 @@ void task_baseInit(void)
 {
     _INIT; /* 初次进入任务时，执行一次 */
 
-    sl_goto(task_fsm);
+    sl_goto(task_async);
 
     _FREE; /* 任务结束，不再执行时，释放资源 */
 

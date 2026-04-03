@@ -23,8 +23,8 @@ void task_idle(void);
 /* 演示 */
 void task_demo(void);
 
-/* 有限状态机演示 */
-void task_fsm(void);
+/* 异步编程演示 */
+void task_async(void);
 
 /* ==用户代码区 结束== */
 /* ============================================================== */

@@ -29,8 +29,7 @@ void task_demo(void)
     _RUN; /* 下方开始进入任务运行逻辑 */
 
     /* 等待测试结束 */
-    if (sl_wait_bare())
-        return;
+    sl_wait_bare();
 
     /* 跳转到空闲任务 */
     sl_goto(task_idle);

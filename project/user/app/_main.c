@@ -24,8 +24,8 @@ weak_define(task_idle);
 /* 演示 */
 weak_define(task_demo);
 
-/* 有限状态机演示 */
-weak_define(task_fsm);
+/* 异步编程演示 */
+weak_define(task_async);
 
 /* ==用户代码区 结束== */
 /* ============================================================== */

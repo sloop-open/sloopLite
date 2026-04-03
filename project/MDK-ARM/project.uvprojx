@@ -520,9 +520,9 @@
               <FilePath>..\user\app\tasks\task_idle.c</FilePath>
             </File>
             <File>
-              <FileName>task_fsm.c</FileName>
+              <FileName>task_async.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\user\app\tasks\task_fsm.c</FilePath>
+              <FilePath>..\user\app\tasks\task_async.c</FilePath>
             </File>
           </Files>
         </Group>

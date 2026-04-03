@@ -134,47 +134,104 @@ void sl_load_new_task(void);
     }
 
 /* ============================================================== */
-/* 有限状态机宏，语法糖。
-有非阻塞 fsm_wait，但不能与 sl_wait 混用，后者会阻塞状态机。
-并行任务延时场景用该宏，会简化状态机逻辑 */
+/* 异步编程相关服务 */
 
-#define _FSM_START              \
-    static uint32_t fsm_state;  \
-    static uint32_t tick_start; \
-    switch (fsm_state)          \
+enum
+{
+    ASYNC_INIT,
+    ASYNC_FREE,
+    ASYNC_RUN,
+};
+
+/* 异步状态定义 */
+#define ASYNC_STATE_DEFINE(name) uint32_t async_state_##name
+/* 异步状态对外声明 */
+#define ASYNC_STATE_DECLARE(name) extern uint32_t async_state_##name
+
+/* 异步任务开始 */
+#define ASYNC_TASK_START(task)           \
+    do                                   \
+    {                                    \
+        async_state_##task = ASYNC_INIT; \
+        sl_task_start(task);             \
+    } while (0)
+
+/* 异步任务停止 */
+#define ASYNC_TASK_STOP(task) async_state_##task = ASYNC_FREE
+
+/* 静态变量定义 */
+#define _ASYNC_STATIC_VAR(name)   \
+    static uint32_t _tick_start;  \
+    static uint32_t _async_state; \
+    _async_state = async_state_##name;
+
+/* 业务初始化 */
+#define _ASYNC_INIT       \
+    switch (_async_state) \
+    {                     \
+    case ASYNC_INIT:      \
     {
 
-#define _CASE_START(id) \
-    case id:            \
+/* 业务清理 */
+#define _ASYNC_FREE(name)     \
+    _async_state = ASYNC_RUN; \
+    break;                    \
+    }                         \
+    case ASYNC_FREE:          \
+    {                         \
+        sl_task_stop(name);
+
+/* 业务执行 */
+#define _ASYNC_RUN             \
+    _async_state = ASYNC_INIT; \
+    break;                     \
+    }                          \
+    case ASYNC_RUN:            \
     {
 
-#define _CASE_END \
-    }             \
-    break;
+/* 业务结束 */
+#define _ASYNC_END(name)      \
+    _async_state = ASYNC_RUN; \
+    break;                    \
+    }                         \
+    }                         \
+    async_state_##name = _async_state;
 
-#define fsm_goto(id) \
-    fsm_state = id
-
-/* 用于隔离用户状态机 ID 与系统 ID */
-#define ID_OFFSET 2622
-
-#define fsm_wait(ms)                                       \
-    tick_start = sl_get_tick();                            \
-    fsm_goto(__LINE__ + ID_OFFSET);                        \
-    case __LINE__ + ID_OFFSET:                             \
-        if ((uint32_t)(sl_get_tick() - tick_start) < (ms)) \
+/* 异步wait */
+#define ASYNC_WAIT(ms)                                    \
+    _tick_start = sl_get_tick();                          \
+    _async_state = __LINE__;                              \
+    case __LINE__:                                        \
+        if ((uint32_t)(sl_get_tick() - _tick_start) < ms) \
             break;
 
-#define _DEFAULT_START \
-    default:           \
-    {
+/* 异步wait条件 */
+#define ASYNC_WAIT_UNTIL(cond) \
+    _async_state = __LINE__;   \
+    case __LINE__:             \
+        if (!(cond))           \
+            break;
 
-#define _DEFAULT_END \
-    }                \
+/* 异步事件定义 */
+#define ASYNC_EVENT_DEFINE(name) char async_event_##name
+/* 异步事件对外声明 */
+#define ASYNC_EVENT_DECLARE(name) extern char async_event_##name
+
+/* 发送事件 */
+#define ASYNC_SEND_EVENT(event) async_event_##event = 1;
+
+/* 异步wait事件 */
+#define ASYNC_WAIT_EVENT(event)     \
+    _async_state = __LINE__;        \
+    case __LINE__:                  \
+        if (!(async_event_##event)) \
+            break;                  \
+        async_event_##event = 0;
+
+/* 异步任务内部停止 */
+#define ASYNC_STOP()           \
+    _async_state = ASYNC_FREE; \
     break;
-
-#define _FSM_END \
-    }
 
 #endif /* __bl_common_H */
 
