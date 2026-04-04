@@ -11,7 +11,11 @@
 FLOW_STATE_DEFINE(flow1);
 FLOW_EVENT_DEFINE(flow1);
 
+FLOW_STATE_DEFINE(flow2);
+FLOW_EVENT_DEFINE(flow2);
+
 void flow1(void);
+void flow2(void);
 
 static char var;
 
@@ -20,23 +24,14 @@ void task_flow(void)
     _INIT; /* 初次进入任务时，执行一次 */
 
     FLOW_START(flow1);
+    FLOW_START(flow2);
 
     _FREE; /* 任务结束，不再执行时，释放资源 */
 
     FLOW_STOP(flow1);
+    FLOW_STOP(flow2);
 
     _RUN; /* 下方开始进入任务运行逻辑 */
-
-    var++;
-
-    sl_prt_withFunc("flow run, var = %d", var);
-
-    sl_wait(1000);
-
-    if (var == 10)
-    {
-        FLOW_SEND_EVENT(flow1);
-    }
 }
 
 void flow1(void)
@@ -51,6 +46,36 @@ void flow1(void)
 
     _FLOW_RUN; /* 下方开始进入工作流运行逻辑 */
 
+    var++;
+
+    sl_prt_withFunc("flow1 run, var = %d", var);
+
+    FLOW_WAIT(1000);
+
+    if (var == 10)
+    {
+        FLOW_SEND_EVENT(flow1);
+
+        FLOW_WAIT_EVENT(flow2);
+
+        sl_prt_withFunc("response received");
+    }
+
+    _FLOW_END(flow1);
+}
+
+void flow2(void)
+{
+    _FLOW_CONTEXT(flow2); /* 工作流上下文，工作流需要的数据在此静态定义 */
+
+    _FLOW_INIT; /* 初次进入工作流，执行一次，初始化工作流上下文 */
+    sl_focus("flow2 start");
+
+    _FLOW_FREE(flow2); /* 工作流结束，不再执行时，释放资源 */
+    sl_focus("flow2 stop");
+
+    _FLOW_RUN; /* 下方开始进入工作流运行逻辑 */
+
     FLOW_UNTIL(var > 5);
 
     sl_prt_withFunc("condition met");
@@ -59,6 +84,9 @@ void flow1(void)
 
     sl_prt_withFunc("event met");
 
+    /* 回复flow1 */
+    FLOW_SEND_EVENT(flow2);
+
     FLOW_WAIT(3000);
 
     sl_prt_withFunc("wait 3s");
@@ -66,7 +94,7 @@ void flow1(void)
     /* 主动结束工作流 */
     FLOW_EXIT();
 
-    _FLOW_END(flow1);
+    _FLOW_END(flow2);
 }
 
 /************************** END OF FILE **************************/
