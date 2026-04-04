@@ -25,17 +25,41 @@ sloopLiteÊÇÒ»¸ö×¨Îª×ÊÔ´ÊÜÏÞÐÍÎ¢¿ØÖÆÆ÷Éè¼ÆµÄÇáÁ¿¼¶Ç¶ÈëÊ½ÈÎÎñµ÷¶È¿ò¼Ü¡£Ëü²ÉÓÃµ¥Ïß³
 
 ### Éè¼ÆÓÅÊÆ
 - **ÇáÁ¿¼¶**£º´úÂë¾«¼ò£¬×ÊÔ´ÏûºÄµÍ
-- **Ò×ÓÃÐÔ**£º¼ò½àÖ±¹ÛµÄAPIÉè¼Æ£¬Ö§³ÖÒì²½±à³Ì
+- **Ò×ÓÃÐÔ**£º¼ò½àÖ±¹ÛµÄAPIÉè¼Æ£¬Ö§³ÖÐ­×÷Ê½¹¤×÷Á÷±à³Ì
 - **¿ÉÅäÖÃ**£ºÖ§³ÖÈÎÎñÊýÁ¿µÈ²ÎÊýÅäÖÃ
 - **µÍÑÓ³Ù**£º¸ßÐ§µÄÈÎÎñµ÷¶ÈËã·¨
 - **¿ÉÀ©Õ¹**£ºÄ£¿é»¯Éè¼Æ£¬±ãÓÚ¹¦ÄÜÀ©Õ¹
-- **Òì²½Ö§³Ö**£ºÄÚÖÃÒì²½±à³Ì¿ò¼Ü£¬¼ò»¯¸´ÔÓÒµÎñÂß¼­
+- **¹¤×÷Á÷Ö§³Ö**£ºÄÚÖÃÐ­×÷Ê½¹¤×÷Á÷±à³Ì¿ò¼Ü£¬¼ò»¯¸´ÔÓÒµÎñÂß¼­
+- **·Ç×èÈû**£º¹¤×÷Á÷µÈ´ý²»»á×èÈûÆäËûÈÎÎñÖ´ÐÐ
 
-### Òì²½±à³ÌÖ§³Ö
-- **¼ò»¯Óï·¨**£º»ùÓÚºê¶¨ÒåµÄÒì²½±à³Ì¿ò¼Ü£¬½µµÍÒì²½±à³Ì¸´ÔÓ¶È
-- **·Ç×èÈûµÈ´ý**£ºÖ§³ÖÑÓÊ±µÈ´ý¡¢Ìõ¼þµÈ´ýºÍÊÂ¼þµÈ´ý
-- **×´Ì¬¹ÜÀí**£º×Ô¶¯Î¬»¤Òì²½ÈÎÎñµÄÉúÃüÖÜÆÚºÍ×´Ì¬
-- **ÊÂ¼þÇý¶¯**£ºÖ§³ÖÊÂ¼þ·¢ËÍºÍµÈ´ý»úÖÆ£¬ÊµÏÖÈÎÎñ¼äÍ¨ÐÅ
+### Ð­×÷Ê½¹¤×÷Á÷±à³Ì
+- **¼ò»¯Óï·¨**£º»ùÓÚºê¶¨ÒåµÄ¹¤×÷Á÷±à³Ì¿ò¼Ü£¬½µµÍ¸´ÔÓÒµÎñÂß¼­µÄÊµÏÖÄÑ¶È
+- **·Ç×èÈûµÈ´ý**£ºÖ§³ÖÑÓÊ±µÈ´ý£¨FLOW_WAIT£©¡¢Ìõ¼þµÈ´ý£¨FLOW_UNTIL£©ºÍÊÂ¼þµÈ´ý£¨FLOW_WAIT_EVENT£©
+- **×´Ì¬¹ÜÀí**£º×Ô¶¯Î¬»¤¹¤×÷Á÷µÄÉúÃüÖÜÆÚºÍ×´Ì¬£¬°üÀ¨³õÊ¼»¯¡¢ÔËÐÐºÍÇåÀí
+- **ÊÂ¼þÇý¶¯**£ºÖ§³ÖÊÂ¼þ·¢ËÍ£¨FLOW_SEND_EVENT£©ºÍµÈ´ý»úÖÆ£¬ÊµÏÖ¹¤×÷Á÷¼äÍ¨ÐÅ
+- **ÏßÐÔ½á¹¹**£º²ÉÓÃÏßÐÔ´úÂë½á¹¹£¬Âß¼­ÇåÎúÒ×¶Á£¬±ÜÃâ¸´ÔÓµÄ×´Ì¬»úÉè¼Æ
+
+#### ¹¤×÷Á÷»úÖÆÏê½â
+
+**±¾ÖÊ**£ºÕâÌ×»úÖÆÊÇÒ»¸öÓÃºê¹¹½¨µÄÐ­×÷Ê½¹¤×÷Á÷¿ò¼Ü£¬½«ÈÎÎñµ÷¶È¡¢×´Ì¬»úºÍÍ¬²½Ô­ÓïÍ³Ò»ÔÚÍ¬Ò»Ì×ÓïÒåÏÂÔËÐÐ¡£Ã¿¸öFlow¶¼ÊÇÒ»¸ö"¿É¹ÒÆðµÄÖ´ÐÐÌå"£¬Í¨¹ýswitch-case + ¾²Ì¬¾Ö²¿±äÁ¿±£´æÖ´ÐÐÉÏÏÂÎÄ£¬½èÖú__LINE__Éú³ÉÎ¨Ò»×´Ì¬£¬ÊµÏÖÀàËÆÐ­³ÌµÄ¶ÏµãÐøÖ´ÐÐ¡£
+
+**ÉúÃüÖÜÆÚ**£º
+- **FLOW_INIT**£ºÖ»Ö´ÐÐÒ»´Î£¬ÓÃÓÚ³õÊ¼»¯ÉÏÏÂÎÄ£¨ÀàËÆ¹¹Ôì½×¶Î£©
+- **FLOW_RUN**£ºÖ÷ÔËÐÐ½×¶Î£¬Âß¼­ÔÚÕâÀï°´"ÏßÐÔ´úÂë"Õ¹¿ª
+- **FLOW_FREE**£ºÍË³ö½×¶Î£¬ÓÃÓÚ×ÊÔ´ÊÍ·Å£¬²¢´¥·¢ÈÎÎñÍ£Ö¹
+
+Íâ²¿Í¨¹ýFLOW_START/FLOW_STOP¿ØÖÆÉúÃüÖÜÆÚÇÐ»»£¬ÄÚ²¿Ò²¿ÉÓÃFLOW_EXITÖ÷¶¯½áÊø¡£
+
+**ºËÐÄÄÜÁ¦**£º·Ç×èÈûµÈ´ý
+- **FLOW_UNTIL**£ºÔÚÌõ¼þ²»Âú×ãÊ±Ö±½Óbreak£¬ÈÃ³öµ÷¶È£»Ìõ¼þÂú×ãºó´Ó¶Ïµã¼ÌÐøÖ´ÐÐ
+- »ùÓÚËü·â×°³ö**FLOW_WAIT**£¨Ê±¼ä£©¡¢**FLOW_WAIT_EVENT**£¨ÊÂ¼þ£©µÈÔ­Óï£¬ÊµÏÖÑÓÊ±¡¢Í¬²½¡¢ÊÂ¼þÇý¶¯¶ø²»×èÈûÏß³Ì
+
+**¹Ø¼üÓÅÊÆ**£ºÏßÐÔÍ¬²½Ð´·¨
+- ´«Í³×´Ì¬»úÐèÒª²ð³É¶à¸östate + Ìø×ª£¬¶øÕâÀï¿ÉÒÔÓÃ"Ë³Ðò´úÂë"±í´ï¸´ÔÓÁ÷³Ì£¨µÈ´ý¡ú´¥·¢¡úÔÙµÈ´ý£©
+- Âß¼­¸ü½Ó½üÈËÄÔË¼Î¬Â·¾¶£¬ÏÔÖø½µµÍ×´Ì¬±¬Õ¨ºÍ¿É¶ÁÐÔ³É±¾
+- FlowÖ®¼äÍ¨¹ýÊÂ¼þ±äÁ¿ÊµÏÖ½âñîÍ¨ÐÅ£¬ÐÎ³ÉÇáÁ¿¼¶Ð­×÷ÏµÍ³
+
+**ÊÊÓÃ³¡¾°**£ºÕûÌåÊÊÓÃÓÚµ¥Ïß³Ì/ÈõRTOS»·¾³£¬ÓÃ¼«µÍ³É±¾ÊµÏÖ½Ó½üÐ­³ÌµÄ±í´ïÁ¦Óëµ÷¶ÈÄÜÁ¦¡£
 
 ## ¼¼Êõ¹æ¸ñ
 
@@ -247,78 +271,88 @@ void main_task(void)
 }
 ```
 
-### Òì²½±à³ÌÊ¾Àý
+### Ð­×÷Ê½¹¤×÷Á÷±à³ÌÊ¾Àý
 
 ```c
 #include "common.h"
 
-// ¶¨ÒåÒì²½ÈÎÎñ×´Ì¬ºÍÊÂ¼þ
-ASYNC_STATE_DEFINE(demo);
-ASYNC_STATE_DECLARE(demo);
+// ¶¨Òå¹¤×÷Á÷×´Ì¬ºÍÊÂ¼þ
+FLOW_STATE_DEFINE(flow1);
+FLOW_EVENT_DEFINE(flow1);
 
-ASYNC_EVENT_DEFINE(demo);
-ASYNC_EVENT_DECLARE(demo);
+FLOW_STATE_DEFINE(flow2);
+FLOW_EVENT_DEFINE(flow2);
 
 static char var;
 
-void task_async(void)
+void task_flow(void)
 {
-    _INIT;
-    
-    // Æô¶¯Òì²½ÈÎÎñ
-    ASYNC_TASK_START(demo);
-    
-    _FREE;
-    
-    // Í£Ö¹Òì²½ÈÎÎñ
-    ASYNC_TASK_STOP(demo);
-    
-    _RUN;
-    
-    var++;
-    sl_prt_withFunc("async run, var = %d", var);
-    
-    sl_wait(1000);
-    
-    if (var == 15)
-    {
-        // ·¢ËÍÊÂ¼þ¸øÒì²½ÈÎÎñ
-        ASYNC_SEND_EVENT(demo);
-    }
+    _INIT; /* ³õ´Î½øÈëÈÎÎñÊ±£¬Ö´ÐÐÒ»´Î */
+
+    // Æô¶¯¹¤×÷Á÷
+    FLOW_START(flow1);
+    FLOW_START(flow2);
+
+    _FREE; /* ÈÎÎñ½áÊø£¬²»ÔÙÖ´ÐÐÊ±£¬ÊÍ·Å×ÊÔ´ */
+
+    // Í£Ö¹¹¤×÷Á÷
+    FLOW_STOP(flow1);
+    FLOW_STOP(flow2);
+
+    _RUN; /* ÏÂ·½¿ªÊ¼½øÈëÈÎÎñÔËÐÐÂß¼­ */
 }
 
-void demo(void)
+void flow1(void)
 {
-    // ¾²Ì¬±äÁ¿¶¨ÒåÇø
-    _ASYNC_STATIC_VAR(demo);
-    
-    // ÒµÎñ³õÊ¼»¯Çø
-    _ASYNC_INIT;
-    sl_focus("async start");
-    
-    // ÒµÎñÇåÀíÇø
-    _ASYNC_FREE(demo);
-    sl_focus("async stop");
-    
-    // ÒµÎñÖ´ÐÐÇø
-    _ASYNC_RUN;
-    
-    // µÈ´ýÌõ¼þÂú×ã
-    ASYNC_WAIT_UNTIL(var > 10);
+    _FLOW_CONTEXT(flow1); /* ¹¤×÷Á÷ÉÏÏÂÎÄ£¬¹¤×÷Á÷ÐèÒªµÄÊý¾ÝÔÚ´Ë¾²Ì¬¶¨Òå */
+
+    _FLOW_INIT; /* ³õ´Î½øÈë¹¤×÷Á÷£¬Ö´ÐÐÒ»´Î£¬³õÊ¼»¯¹¤×÷Á÷ÉÏÏÂÎÄ */
+    sl_focus("flow1 start");
+
+    _FLOW_FREE(flow1); /* ¹¤×÷Á÷½áÊø£¬²»ÔÙÖ´ÐÐÊ±£¬ÊÍ·Å×ÊÔ´ */
+    sl_focus("flow1 stop");
+
+    _FLOW_RUN; /* ÏÂ·½¿ªÊ¼½øÈë¹¤×÷Á÷ÔËÐÐÂß¼­ */
+
+    var++;
+    sl_prt_withFunc("flow1 run, var = %d", var);
+
+    FLOW_WAIT(1000); // ·Ç×èÈûµÈ´ý1Ãë
+
+    if (var == 6)
+    {
+        FLOW_SEND_EVENT(flow1); // ·¢ËÍÊÂ¼þ¸øflow2
+        FLOW_WAIT_EVENT(flow2); // µÈ´ýflow2µÄÏìÓ¦
+        sl_prt_withFunc("response received");
+    }
+
+    _FLOW_END(flow1);
+}
+
+void flow2(void)
+{
+    _FLOW_CONTEXT(flow2); /* ¹¤×÷Á÷ÉÏÏÂÎÄ£¬¹¤×÷Á÷ÐèÒªµÄÊý¾ÝÔÚ´Ë¾²Ì¬¶¨Òå */
+
+    _FLOW_INIT; /* ³õ´Î½øÈë¹¤×÷Á÷£¬Ö´ÐÐÒ»´Î£¬³õÊ¼»¯¹¤×÷Á÷ÉÏÏÂÎÄ */
+    sl_focus("flow2 start");
+
+    _FLOW_FREE(flow2); /* ¹¤×÷Á÷½áÊø£¬²»ÔÙÖ´ÐÐÊ±£¬ÊÍ·Å×ÊÔ´ */
+    sl_focus("flow2 stop");
+
+    _FLOW_RUN; /* ÏÂ·½¿ªÊ¼½øÈë¹¤×÷Á÷ÔËÐÐÂß¼­ */
+
+    FLOW_UNTIL(var > 3); // µÈ´ýÌõ¼þÂú×ã
     sl_prt_withFunc("condition met");
-    
-    // µÈ´ýÊÂ¼þ
-    ASYNC_WAIT_EVENT(demo);
+
+    FLOW_WAIT_EVENT(flow1); // µÈ´ýflow1µÄÊÂ¼þ
     sl_prt_withFunc("event met");
-    
-    // ÑÓÊ±µÈ´ý
-    ASYNC_WAIT(5000);
-    sl_prt_withFunc("wait 5s");
-    
-    // Í£Ö¹Òì²½ÈÎÎñ
-    ASYNC_STOP();
-    
-    _ASYNC_END(demo);
+
+    FLOW_SEND_EVENT(flow2); // »Ø¸´flow1
+
+    FLOW_WAIT(2000); // ·Ç×èÈûµÈ´ý2Ãë
+    sl_prt_withFunc("wait 2s");
+
+    _FLOW_END(flow2);
 }
 ```
 
@@ -395,17 +429,41 @@ sloopLite is a lightweight embedded task scheduling framework designed specifica
 
 ### Design Advantages
 - **Lightweight**: Compact code with low resource consumption
-- **Ease of Use**: Simple and intuitive API design with async programming support
+- **Ease of Use**: Simple and intuitive API design with collaborative workflow programming support
 - **Configurable**: Supports configuration of parameters such as task quantity
 - **Low Latency**: Efficient task scheduling algorithm
 - **Extensible**: Modular design for easy function expansion
-- **Async Support**: Built-in async programming framework to simplify complex business logic
+- **Workflow Support**: Built-in collaborative workflow programming framework to simplify complex business logic
+- **Non-blocking**: Workflow waiting does not block other tasks from executing
 
-### Async Programming Support
-- **Simplified Syntax**: Macro-based async programming framework that reduces async programming complexity
-- **Non-blocking Wait**: Supports delay waiting, condition waiting, and event waiting
-- **State Management**: Automatically maintains the lifecycle and state of async tasks
-- **Event Driven**: Supports event sending and waiting mechanisms for inter-task communication
+### Collaborative Workflow Programming
+- **Simplified Syntax**: Macro-based workflow programming framework that reduces the complexity of implementing complex business logic
+- **Non-blocking Wait**: Supports delay waiting (FLOW_WAIT), condition waiting (FLOW_UNTIL), and event waiting (FLOW_WAIT_EVENT)
+- **State Management**: Automatically maintains the lifecycle and state of workflows, including initialization, running, and cleanup
+- **Event Driven**: Supports event sending (FLOW_SEND_EVENT) and waiting mechanisms for inter-workflow communication
+- **Linear Structure**: Uses linear code structure for clear and readable logic, avoiding complex state machine designs
+
+#### Workflow Mechanism Details
+
+**Essence**: This mechanism is a macro-based collaborative workflow framework that unifies task scheduling, state machines, and synchronization primitives under the same semantic system. Each Flow is a "suspendable execution unit" that uses switch-case + static local variables to save execution context, and generates unique states using __LINE__ to achieve coroutine-like breakpoint continuation.
+
+**Lifecycle**:
+- **FLOW_INIT**: Executes only once, used to initialize context (similar to construction phase)
+- **FLOW_RUN**: Main running phase, where logic unfolds as "linear code"
+- **FLOW_FREE**: Exit phase, used for resource release and triggering task stop
+
+Lifecycle switching is controlled externally via FLOW_START/FLOW_STOP, and can also beÖ÷¶¯½áÊø internally using FLOW_EXIT.
+
+**Core Capability**: Non-blocking waiting
+- **FLOW_UNTIL**: Directly breaks and yields scheduling when conditions are not met; continues execution from breakpoint when conditions are met
+- Based on this, it encapsulates **FLOW_WAIT** (time), **FLOW_WAIT_EVENT** (event) and other primitives to implement delay, synchronization, and event-driven operations without blocking threads
+
+**Key Advantage**: Linear synchronous writing
+- Traditional state machines need to be split into multiple states + jumps, while here complex processes (wait¡útrigger¡úwait again) can be expressed with "sequential code"
+- Logic is closer to human thinking paths, significantly reducing state explosion and readability costs
+- Flows communicate through event variables to achieve decoupled communication, forming a lightweight collaborative system
+
+**Applicable Scenarios**: Overall suitable for single-threaded/weak RTOS environments, achieving coroutine-like expressiveness and scheduling capabilities at extremely low cost.
 
 ## Technical Specifications
 
@@ -626,78 +684,88 @@ void main_task(void)
 }
 ```
 
-### Async Programming Example
+### Collaborative Workflow Programming Example
 
 ```c
 #include "common.h"
 
-// Define async task state and event
-ASYNC_STATE_DEFINE(demo);
-ASYNC_STATE_DECLARE(demo);
+// Define workflow state and event
+FLOW_STATE_DEFINE(flow1);
+FLOW_EVENT_DEFINE(flow1);
 
-ASYNC_EVENT_DEFINE(demo);
-ASYNC_EVENT_DECLARE(demo);
+FLOW_STATE_DEFINE(flow2);
+FLOW_EVENT_DEFINE(flow2);
 
 static char var;
 
-void task_async(void)
+void task_flow(void)
 {
-    _INIT;
-    
-    // Start async task
-    ASYNC_TASK_START(demo);
-    
-    _FREE;
-    
-    // Stop async task
-    ASYNC_TASK_STOP(demo);
-    
-    _RUN;
-    
-    var++;
-    sl_prt_withFunc("async run, var = %d", var);
-    
-    sl_wait(1000);
-    
-    if (var == 15)
-    {
-        // Send event to async task
-        ASYNC_SEND_EVENT(demo);
-    }
+    _INIT; /* First entry into task, execute once */
+
+    // Start workflows
+    FLOW_START(flow1);
+    FLOW_START(flow2);
+
+    _FREE; /* Task ends, no longer execute, release resources */
+
+    // Stop workflows
+    FLOW_STOP(flow1);
+    FLOW_STOP(flow2);
+
+    _RUN; /* Below starts task running logic */
 }
 
-void demo(void)
+void flow1(void)
 {
-    // Static variable definition area
-    _ASYNC_STATIC_VAR(demo);
-    
-    // Business initialization area
-    _ASYNC_INIT;
-    sl_focus("async start");
-    
-    // Business cleanup area
-    _ASYNC_FREE(demo);
-    sl_focus("async stop");
-    
-    // Business execution area
-    _ASYNC_RUN;
-    
-    // Wait for condition to be met
-    ASYNC_WAIT_UNTIL(var > 10);
+    _FLOW_CONTEXT(flow1); /* Workflow context, workflow data defined statically here */
+
+    _FLOW_INIT; /* First entry into workflow, execute once, initialize workflow context */
+    sl_focus("flow1 start");
+
+    _FLOW_FREE(flow1); /* Workflow ends, no longer execute, release resources */
+    sl_focus("flow1 stop");
+
+    _FLOW_RUN; /* Below starts workflow running logic */
+
+    var++;
+    sl_prt_withFunc("flow1 run, var = %d", var);
+
+    FLOW_WAIT(1000); // Non-blocking wait for 1 second
+
+    if (var == 6)
+    {
+        FLOW_SEND_EVENT(flow1); // Send event to flow2
+        FLOW_WAIT_EVENT(flow2); // Wait for response from flow2
+        sl_prt_withFunc("response received");
+    }
+
+    _FLOW_END(flow1);
+}
+
+void flow2(void)
+{
+    _FLOW_CONTEXT(flow2); /* Workflow context, workflow data defined statically here */
+
+    _FLOW_INIT; /* First entry into workflow, execute once, initialize workflow context */
+    sl_focus("flow2 start");
+
+    _FLOW_FREE(flow2); /* Workflow ends, no longer execute, release resources */
+    sl_focus("flow2 stop");
+
+    _FLOW_RUN; /* Below starts workflow running logic */
+
+    FLOW_UNTIL(var > 3); // Wait for condition to be met
     sl_prt_withFunc("condition met");
-    
-    // Wait for event
-    ASYNC_WAIT_EVENT(demo);
+
+    FLOW_WAIT_EVENT(flow1); // Wait for event from flow1
     sl_prt_withFunc("event met");
-    
-    // Delay wait
-    ASYNC_WAIT(5000);
-    sl_prt_withFunc("wait 5s");
-    
-    // Stop async task
-    ASYNC_STOP();
-    
-    _ASYNC_END(demo);
+
+    FLOW_SEND_EVENT(flow2); // Reply to flow1
+
+    FLOW_WAIT(2000); // Non-blocking wait for 2 seconds
+    sl_prt_withFunc("wait 2s");
+
+    _FLOW_END(flow2);
 }
 ```
 

@@ -91,8 +91,7 @@ void flow2(void)
 
     sl_prt_withFunc("wait 2s");
 
-    /* 主动结束工作流 */
-    FLOW_EXIT();
+    sl_goto(task_idle);
 
     _FLOW_END(flow2);
 }
