@@ -24,8 +24,8 @@ weak_define(task_idle);
 /* 演示 */
 weak_define(task_demo);
 
-/* 异步编程演示 */
-weak_define(task_async);
+/* 工作流编程演示 */
+weak_define(task_flow);
 
 /* ==用户代码区 结束== */
 /* ============================================================== */

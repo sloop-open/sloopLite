@@ -137,103 +137,106 @@ void sl_load_new_task(void);
     }
 
 /* ============================================================== */
-/* 异步编程相关服务 */
+/* Flow-based 协作式工作流编程 */
 
+/* Flow 状态 */
 enum
 {
-    ASYNC_INIT,
-    ASYNC_FREE,
-    ASYNC_RUN,
+    FLOW_INIT,
+    FLOW_FREE,
+    FLOW_RUN,
 };
 
-/* 异步状态定义 */
-#define ASYNC_STATE_DEFINE(name) uint32_t async_state_##name
-/* 异步状态对外声明 */
-#define ASYNC_STATE_DECLARE(name) extern uint32_t async_state_##name
+/* Flow 状态定义 */
+#define FLOW_STATE_DEFINE(name) uint32_t flow_state_##name
+#define FLOW_STATE_DECLARE(name) extern uint32_t flow_state_##name
 
-/* 异步任务开始 */
-#define ASYNC_TASK_START(task)           \
-    do                                   \
-    {                                    \
-        async_state_##task = ASYNC_INIT; \
-        sl_task_start(task);             \
+/* Flow 启动 */
+#define FLOW_START(name)               \
+    do                                 \
+    {                                  \
+        flow_state_##name = FLOW_INIT; \
+        sl_task_start(name);           \
     } while (0)
 
-/* 异步任务停止 */
-#define ASYNC_TASK_STOP(task) async_state_##task = ASYNC_FREE
+/* Flow 停止（外部） */
+#define FLOW_STOP(name) flow_state_##name = FLOW_FREE
 
-/* 静态变量定义 */
-#define _ASYNC_STATIC_VAR(name)   \
-    static uint32_t _tick_start;  \
-    static uint32_t _async_state; \
-    _async_state = async_state_##name;
+/* Flow 内部上下文 */
+#define _FLOW_CONTEXT(name)      \
+    static uint32_t _flow_tick;  \
+    static uint32_t _flow_state; \
+    _flow_state = flow_state_##name;
 
-/* 业务初始化 */
-#define _ASYNC_INIT       \
-    switch (_async_state) \
-    {                     \
-    case ASYNC_INIT:      \
+/* 初始化区 */
+#define _FLOW_INIT       \
+    switch (_flow_state) \
+    {                    \
+    case FLOW_INIT:      \
     {
 
-/* 业务清理 */
-#define _ASYNC_FREE(name)     \
-    _async_state = ASYNC_RUN; \
-    break;                    \
-    }                         \
-    case ASYNC_FREE:          \
-    {                         \
+/* 清理区 */
+#define _FLOW_FREE(name)    \
+    _flow_state = FLOW_RUN; \
+    break;                  \
+    }                       \
+    case FLOW_FREE:         \
+    {                       \
         sl_task_stop(name);
 
-/* 业务执行 */
-#define _ASYNC_RUN             \
-    _async_state = ASYNC_INIT; \
-    break;                     \
-    }                          \
-    case ASYNC_RUN:            \
+/* 运行区 */
+#define _FLOW_RUN            \
+    _flow_state = FLOW_INIT; \
+    break;                   \
+    }                        \
+    case FLOW_RUN:           \
     {
 
-/* 业务结束 */
-#define _ASYNC_END(name)      \
-    _async_state = ASYNC_RUN; \
-    break;                    \
-    }                         \
-    }                         \
-    async_state_##name = _async_state;
+/* 结束 */
+#define _FLOW_END(name)     \
+    _flow_state = FLOW_RUN; \
+    break;                  \
+    }                       \
+    }                       \
+    flow_state_##name = _flow_state;
 
-/* 异步wait */
-#define ASYNC_WAIT(ms)                                    \
-    _tick_start = sl_get_tick();                          \
-    _async_state = __LINE__;                              \
-    case __LINE__:                                        \
-        if ((uint32_t)(sl_get_tick() - _tick_start) < ms) \
+/* ===================== */
+/*      FLOW 原语        */
+/* ===================== */
+
+/* 时间等待 */
+#define FLOW_WAIT(ms)                                      \
+    _flow_tick = sl_get_tick();                            \
+    _flow_state = __LINE__;                                \
+    case __LINE__:                                         \
+        if ((uint32_t)(sl_get_tick() - _flow_tick) < (ms)) \
             break;
 
-/* 异步wait条件 */
-#define ASYNC_WAIT_UNTIL(cond) \
-    _async_state = __LINE__;   \
-    case __LINE__:             \
-        if (!(cond))           \
+/* 条件等待（核心原语） */
+#define FLOW_UNTIL(cond)    \
+    _flow_state = __LINE__; \
+    case __LINE__:          \
+        if (!(cond))        \
             break;
 
-/* 异步事件定义 */
-#define ASYNC_EVENT_DEFINE(name) char async_event_##name
-/* 异步事件对外声明 */
-#define ASYNC_EVENT_DECLARE(name) extern char async_event_##name
+/* 事件定义 */
+#define FLOW_EVENT_DEFINE(name) char flow_event_##name
+#define FLOW_EVENT_DECLARE(name) extern char flow_event_##name
 
 /* 发送事件 */
-#define ASYNC_SEND_EVENT(event) async_event_##event = 1;
+#define FLOW_SEND_EVENT(event) flow_event_##event = 1
 
-/* 异步wait事件 */
-#define ASYNC_WAIT_EVENT(event)     \
-    _async_state = __LINE__;        \
-    case __LINE__:                  \
-        if (!(async_event_##event)) \
-            break;                  \
-        async_event_##event = 0;
+/* 等待事件（消费型） */
+#define FLOW_WAIT_EVENT(event)     \
+    _flow_state = __LINE__;        \
+    case __LINE__:                 \
+        if (!(flow_event_##event)) \
+            break;                 \
+        flow_event_##event = 0;
 
-/* 异步任务内部停止 */
-#define ASYNC_STOP()           \
-    _async_state = ASYNC_FREE; \
+/* Flow 内部停止 */
+#define FLOW_EXIT()          \
+    _flow_state = FLOW_FREE; \
     break;
 
 #endif /* __bl_common_H */
