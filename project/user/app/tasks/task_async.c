@@ -53,6 +53,7 @@ void demo(void)
 
     /* 业务清理区 */
     _ASYNC_FREE(demo);
+    sl_focus("async stop");
 
     /* 业务执行区 */
     _ASYNC_RUN;

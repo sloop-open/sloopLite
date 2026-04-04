@@ -94,6 +94,9 @@ void print_null(const char *sFormat, ...);
 /* 打印变量 */
 #define sl_prt_var(var) sl_prt_withFunc(#var " = %d", (int)var)
 
+/* 打印hex */
+#define sl_prt_hex(hex) sl_prt_withFunc(#hex " = 0x%x", (int)hex)
+
 /* 打印字符串 */
 #define sl_prt_str(str) sl_prt_withFunc("%s", str)
 

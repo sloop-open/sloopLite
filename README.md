@@ -25,16 +25,17 @@ sloopLiteÊÇÒ»¸ö×¨Îª×ÊÔ´ÊÜÏÞÐÍÎ¢¿ØÖÆÆ÷Éè¼ÆµÄÇáÁ¿¼¶Ç¶ÈëÊ½ÈÎÎñµ÷¶È¿ò¼Ü¡£Ëü²ÉÓÃµ¥Ïß³
 
 ### Éè¼ÆÓÅÊÆ
 - **ÇáÁ¿¼¶**£º´úÂë¾«¼ò£¬×ÊÔ´ÏûºÄµÍ
-- **Ò×ÓÃÐÔ**£º¼ò½àÖ±¹ÛµÄAPIÉè¼Æ
+- **Ò×ÓÃÐÔ**£º¼ò½àÖ±¹ÛµÄAPIÉè¼Æ£¬Ö§³ÖÒì²½±à³Ì
 - **¿ÉÅäÖÃ**£ºÖ§³ÖÈÎÎñÊýÁ¿µÈ²ÎÊýÅäÖÃ
 - **µÍÑÓ³Ù**£º¸ßÐ§µÄÈÎÎñµ÷¶ÈËã·¨
 - **¿ÉÀ©Õ¹**£ºÄ£¿é»¯Éè¼Æ£¬±ãÓÚ¹¦ÄÜÀ©Õ¹
+- **Òì²½Ö§³Ö**£ºÄÚÖÃÒì²½±à³Ì¿ò¼Ü£¬¼ò»¯¸´ÔÓÒµÎñÂß¼­
 
-### ÓÐÏÞ×´Ì¬»úÖ§³Ö
-- **¼ò»¯Óï·¨**£º»ùÓÚºê¶¨ÒåµÄÏßÐÔ×´Ì¬»úÓï·¨ÌÇ£¬ÎÞÐèÖ¸¶¨×´Ì¬»úÃû³Æ
-- **·Ç×èÈûµÈ´ý**£ºÄÚÖÃfsm_waitÖ§³Ö£¬Ê¹ÓÃÇÉÃîµÄÁÙÊ±×´Ì¬»úÖÆ
-- **ÏßÐÔ½á¹¹**£ºÒ×ÓÚÀí½âºÍÎ¬»¤µÄ×´Ì¬×ª»»Âß¼­
-- **×Ô¶¯¹ÜÀí**£º×Ô¶¯Î¬»¤×´Ì¬±äÁ¿ºÍÊ±¼ä´Á£¬ÎÞÐèÊÖ¶¯ÉùÃ÷
+### Òì²½±à³ÌÖ§³Ö
+- **¼ò»¯Óï·¨**£º»ùÓÚºê¶¨ÒåµÄÒì²½±à³Ì¿ò¼Ü£¬½µµÍÒì²½±à³Ì¸´ÔÓ¶È
+- **·Ç×èÈûµÈ´ý**£ºÖ§³ÖÑÓÊ±µÈ´ý¡¢Ìõ¼þµÈ´ýºÍÊÂ¼þµÈ´ý
+- **×´Ì¬¹ÜÀí**£º×Ô¶¯Î¬»¤Òì²½ÈÎÎñµÄÉúÃüÖÜÆÚºÍ×´Ì¬
+- **ÊÂ¼þÇý¶¯**£ºÖ§³ÖÊÂ¼þ·¢ËÍºÍµÈ´ý»úÖÆ£¬ÊµÏÖÈÎÎñ¼äÍ¨ÐÅ
 
 ## ¼¼Êõ¹æ¸ñ
 
@@ -246,55 +247,78 @@ void main_task(void)
 }
 ```
 
-### ÓÐÏÞ×´Ì¬»úÊ¾Àý
+### Òì²½±à³ÌÊ¾Àý
 
 ```c
 #include "common.h"
 
-void task_fsm(void)
+// ¶¨ÒåÒì²½ÈÎÎñ×´Ì¬ºÍÊÂ¼þ
+ASYNC_STATE_DEFINE(demo);
+ASYNC_STATE_DECLARE(demo);
+
+ASYNC_EVENT_DEFINE(demo);
+ASYNC_EVENT_DECLARE(demo);
+
+static char var;
+
+void task_async(void)
 {
     _INIT;
     
+    // Æô¶¯Òì²½ÈÎÎñ
+    ASYNC_TASK_START(demo);
+    
     _FREE;
+    
+    // Í£Ö¹Òì²½ÈÎÎñ
+    ASYNC_TASK_STOP(demo);
     
     _RUN;
     
-    // ÓÐÏÞ×´Ì¬»ú¶¨Òå
-    _FSM_START
+    var++;
+    sl_prt_withFunc("async run, var = %d", var);
     
-    _CASE_START(0)
-    sl_focus("start");
-    sl_printf("case 0");
+    sl_wait(1000);
     
-    sl_printf("wait 100ms");
-    fsm_wait(100);  // ·Ç×èÈûµÈ´ý100ºÁÃë
-    fsm_goto(1);    // Ìø×ªµ½×´Ì¬1
-    _CASE_END
+    if (var == 15)
+    {
+        // ·¢ËÍÊÂ¼þ¸øÒì²½ÈÎÎñ
+        ASYNC_SEND_EVENT(demo);
+    }
+}
+
+void demo(void)
+{
+    // ¾²Ì¬±äÁ¿¶¨ÒåÇø
+    _ASYNC_STATIC_VAR(demo);
     
-    _CASE_START(1)
-    sl_printf("case 1");
+    // ÒµÎñ³õÊ¼»¯Çø
+    _ASYNC_INIT;
+    sl_focus("async start");
     
-    sl_printf("wait 100ms");
-    fsm_wait(100);  // ·Ç×èÈûµÈ´ý100ºÁÃë
-    fsm_goto(2);    // Ìø×ªµ½×´Ì¬2
-    _CASE_END
+    // ÒµÎñÇåÀíÇø
+    _ASYNC_FREE(demo);
+    sl_focus("async stop");
     
-    _CASE_START(2)
-    sl_printf("case 2");
+    // ÒµÎñÖ´ÐÐÇø
+    _ASYNC_RUN;
     
-    sl_printf("wait 300ms");
-    fsm_wait(300);  // ·Ç×èÈûµÈ´ý300ºÁÃë
-    sl_printf("wait 500ms");
-    fsm_wait(500);  // ·Ç×èÈûµÈ´ý500ºÁÃë
-    sl_printf("wait 1000ms");
-    fsm_wait(1000); // ·Ç×èÈûµÈ´ý1000ºÁÃë
-    fsm_goto(0);    // Ñ­»·»Øµ½×´Ì¬0
-    _CASE_END
+    // µÈ´ýÌõ¼þÂú×ã
+    ASYNC_WAIT_UNTIL(var > 10);
+    sl_prt_withFunc("condition met");
     
-    _DEFAULT_START
-    _DEFAULT_END
+    // µÈ´ýÊÂ¼þ
+    ASYNC_WAIT_EVENT(demo);
+    sl_prt_withFunc("event met");
     
-    _FSM_END
+    // ÑÓÊ±µÈ´ý
+    ASYNC_WAIT(5000);
+    sl_prt_withFunc("wait 5s");
+    
+    // Í£Ö¹Òì²½ÈÎÎñ
+    ASYNC_STOP();
+    
+    _ASYNC_END(demo);
 }
 ```
 
@@ -371,16 +395,17 @@ sloopLite is a lightweight embedded task scheduling framework designed specifica
 
 ### Design Advantages
 - **Lightweight**: Compact code with low resource consumption
-- **Ease of Use**: Simple and intuitive API design
+- **Ease of Use**: Simple and intuitive API design with async programming support
 - **Configurable**: Supports configuration of parameters such as task quantity
 - **Low Latency**: Efficient task scheduling algorithm
 - **Extensible**: Modular design for easy function expansion
+- **Async Support**: Built-in async programming framework to simplify complex business logic
 
-### Finite State Machine Support
-- **Simplified Syntax**: Macro-based linear state machine syntax sugar, no need to specify state machine name
-- **Non-blocking Wait**: Built-in fsm_wait support using an ingenious temporary state mechanism
-- **Linear Structure**: Easy to understand and maintain state transition logic
-- **Automatic Management**: Automatically maintains state variables and timestamps, no manual declaration required
+### Async Programming Support
+- **Simplified Syntax**: Macro-based async programming framework that reduces async programming complexity
+- **Non-blocking Wait**: Supports delay waiting, condition waiting, and event waiting
+- **State Management**: Automatically maintains the lifecycle and state of async tasks
+- **Event Driven**: Supports event sending and waiting mechanisms for inter-task communication
 
 ## Technical Specifications
 
@@ -601,56 +626,80 @@ void main_task(void)
 }
 ```
 
-### Finite State Machine Example
+### Async Programming Example
 
 ```c
 #include "common.h"
 
-void task_fsm(void)
+// Define async task state and event
+ASYNC_STATE_DEFINE(demo);
+ASYNC_STATE_DECLARE(demo);
+
+ASYNC_EVENT_DEFINE(demo);
+ASYNC_EVENT_DECLARE(demo);
+
+static char var;
+
+void task_async(void)
 {
     _INIT;
     
+    // Start async task
+    ASYNC_TASK_START(demo);
+    
     _FREE;
+    
+    // Stop async task
+    ASYNC_TASK_STOP(demo);
     
     _RUN;
     
-    // Finite state machine definition
-    _FSM_START
+    var++;
+    sl_prt_withFunc("async run, var = %d", var);
     
-    _CASE_START(0)
-    sl_focus("start");
-    sl_printf("case 0");
+    sl_wait(1000);
     
-    sl_printf("wait 100ms");
-    fsm_wait(100);  // Non-blocking wait for 100 milliseconds
-    fsm_goto(1);    // Transition to state 1
-    _CASE_END
-    
-    _CASE_START(1)
-    sl_printf("case 1");
-    
-    sl_printf("wait 100ms");
-    fsm_wait(100);  // Non-blocking wait for 100 milliseconds
-    fsm_goto(2);    // Transition to state 2
-    _CASE_END
-    
-    _CASE_START(2)
-    sl_printf("case 2");
-    
-    sl_printf("wait 300ms");
-    fsm_wait(300);  // Non-blocking wait for 300 milliseconds
-    sl_printf("wait 500ms");
-    fsm_wait(500);  // Non-blocking wait for 500 milliseconds
-    sl_printf("wait 1000ms");
-    fsm_wait(1000); // Non-blocking wait for 1000 milliseconds
-    fsm_goto(0);    // Loop back to state 0
-    _CASE_END
-    
-    _DEFAULT_START
-    _DEFAULT_END
-    
-    _FSM_END
+    if (var == 15)
+    {
+        // Send event to async task
+        ASYNC_SEND_EVENT(demo);
+    }
 }
+
+void demo(void)
+{
+    // Static variable definition area
+    _ASYNC_STATIC_VAR(demo);
+    
+    // Business initialization area
+    _ASYNC_INIT;
+    sl_focus("async start");
+    
+    // Business cleanup area
+    _ASYNC_FREE(demo);
+    sl_focus("async stop");
+    
+    // Business execution area
+    _ASYNC_RUN;
+    
+    // Wait for condition to be met
+    ASYNC_WAIT_UNTIL(var > 10);
+    sl_prt_withFunc("condition met");
+    
+    // Wait for event
+    ASYNC_WAIT_EVENT(demo);
+    sl_prt_withFunc("event met");
+    
+    // Delay wait
+    ASYNC_WAIT(5000);
+    sl_prt_withFunc("wait 5s");
+    
+    // Stop async task
+    ASYNC_STOP();
+    
+    _ASYNC_END(demo);
+}
+```
 
 ## Configuration File
 
