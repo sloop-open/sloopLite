@@ -52,7 +52,7 @@ void flow1(void)
 
     FLOW_WAIT(1000);
 
-    if (var == 10)
+    if (var == 6)
     {
         FLOW_SEND_EVENT(flow1);
 
@@ -76,7 +76,7 @@ void flow2(void)
 
     _FLOW_RUN; /* 下方开始进入工作流运行逻辑 */
 
-    FLOW_UNTIL(var > 5);
+    FLOW_UNTIL(var > 3);
 
     sl_prt_withFunc("condition met");
 
@@ -87,9 +87,9 @@ void flow2(void)
     /* 回复flow1 */
     FLOW_SEND_EVENT(flow2);
 
-    FLOW_WAIT(3000);
+    FLOW_WAIT(2000);
 
-    sl_prt_withFunc("wait 3s");
+    sl_prt_withFunc("wait 2s");
 
     /* 主动结束工作流 */
     FLOW_EXIT();
