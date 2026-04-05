@@ -9,10 +9,10 @@
 #include "common.h"
 
 FLOW_STATE_DEFINE(flow1);
-FLOW_EVENT_DEFINE(flow1);
+FLOW_EVENT_DEFINE(evt1);
 
 FLOW_STATE_DEFINE(flow2);
-FLOW_EVENT_DEFINE(flow2);
+FLOW_EVENT_DEFINE(evt2);
 
 void flow1(void);
 void flow2(void);
@@ -54,14 +54,14 @@ void flow1(void)
 
     if (var == 6)
     {
-        FLOW_SEND_EVENT(flow1);
+        FLOW_SEND_EVENT(evt1);
 
-        FLOW_WAIT_EVENT(flow2);
+        FLOW_WAIT_EVENT(evt2);
 
         sl_prt_withFunc("response received");
     }
 
-    _FLOW_END(flow1);
+    _FLOW_END;
 }
 
 void flow2(void)
@@ -80,12 +80,12 @@ void flow2(void)
 
     sl_prt_withFunc("condition met");
 
-    FLOW_WAIT_EVENT(flow1);
+    FLOW_WAIT_EVENT(evt1);
 
     sl_prt_withFunc("event met");
 
     /* »Ø¸´flow1 */
-    FLOW_SEND_EVENT(flow2);
+    FLOW_SEND_EVENT(evt2);
 
     FLOW_WAIT(2000);
 
@@ -93,7 +93,7 @@ void flow2(void)
 
     sl_goto(task_idle);
 
-    _FLOW_END(flow2);
+    _FLOW_END;
 }
 
 /************************** END OF FILE **************************/
