@@ -6,6 +6,63 @@
 
 sloopLite是一个专为资源受限型微控制器设计的轻量级嵌入式任务调度框架。它采用单线程协作式调度模型，提供了丰富的任务管理功能，同时保持极低的资源消耗，非常适合资源受限的嵌入式应用开发。
 
+### sloop 机制详解
+
+**本质**：这套sl机制是一个单线程协作式调度框架，通过"互斥主任务 + 并行回调 + 软件定时器"构建执行模型。
+
+**一、执行结构**
+主循环持续调用sloop()，内部顺序执行：
+- **mutex_task_run()**：运行当前唯一主任务
+- **parallel_task_run()**：轮询所有并行任务
+
+同时，tick中断触发soft_timer，驱动：
+- 超时任务（一次性）
+- 周期任务
+- 多次任务
+
+形成"时间驱动 + 主流程"的组合。
+
+**二、生命周期机制（核心）**
+通过_INIT/_FREE/_RUN将任务拆成三个阶段：
+- **_INIT**：首次进入执行一次（初始化资源、启动定时器等）
+- **_RUN**：主逻辑区（循环执行）
+- **_FREE**：任务切换时执行（释放资源）
+
+任务切换由sl_goto()触发，本质是：
+1. 标记_free
+2. 下一轮执行_FREE
+3. 加载新任务（sl_load_new_task）
+4. 重新进入_INIT
+
+**? 等价于一个带生命周期钩子的状态机任务模型**
+
+**三、同步机制**
+通过sl_wait/sl_wait_bare提供"伪阻塞"能力：
+- 当前任务进入等待循环
+- 内部持续执行并行任务
+- 通过sl_wait_break/continue进行唤醒
+
+特点是：
+- 写法阻塞，但系统不阻塞
+
+**四、设计优点**
+- **极低开销**：无栈切换，无上下文保存
+- **控制流线性**：避免传统状态机拆分
+- **时间驱动统一**：所有定时行为由tick管理
+- **中断安全**：通过task_once延迟执行复杂逻辑
+- **行为可预测**：单主流程，无竞争问题
+
+**五、局限性**
+- **单主流程**：无法多任务同时"阻塞等待"
+- **同步能力有限**：等待机制为全局单点
+- **事件模型弱**：无队列、无多事件组合
+- **依赖规范**：必须所有逻辑纳入调度器
+- **CPU利用率**：等待期间为忙轮询
+
+**总结**
+这套机制不是RTOS，而是：
+以时间驱动为核心的协作式执行框架，用最小成本实现"接近同步"的异步编程模型。
+
 ## 主要特性
 
 ### 任务管理
@@ -409,6 +466,63 @@ Lightweight Embedded Bare-Metal Single-Threaded Cooperative Task Scheduling Fram
 ## Project Introduction
 
 sloopLite is a lightweight embedded task scheduling framework designed specifically for STM32G0 series microcontrollers. It adopts a single-threaded cooperative scheduling model, providing rich task management functions while maintaining extremely low resource consumption, making it very suitable for resource-constrained embedded application development.
+
+### sloop Mechanism Details
+
+**Essence**：This sl mechanism is a single-threaded cooperative scheduling framework that builds an execution model through "mutual exclusion main task + parallel callback + software timer".
+
+**1. Execution Structure**
+The main loop continuously calls sloop(), which internally executes in sequence:
+- **mutex_task_run()**: Runs the current unique main task
+- **parallel_task_run()**: Polls all parallel tasks
+
+At the same time, the tick interrupt triggers soft_timer, driving:
+- Timeout tasks (one-time)
+- Cycle tasks
+- Multiple tasks
+
+Forming a combination of "time-driven + main process".
+
+**2. Lifecycle Mechanism (Core)**
+Tasks are split into three stages through _INIT/_FREE/_RUN:
+- **_INIT**: Executes once on first entry (initialize resources, start timers, etc.)
+- **_RUN**: Main logic area (executed in a loop)
+- **_FREE**: Executed during task switching (release resources)
+
+Task switching is triggered by sl_goto(), essentially:
+1. Mark _free
+2. Execute _FREE in the next round
+3. Load new task (sl_load_new_task)
+4. Re-enter _INIT
+
+**? Equivalent to a state machine task model with lifecycle hooks**
+
+**3. Synchronization Mechanism**
+Provides "pseudo-blocking" capability through sl_wait/sl_wait_bare:
+- Current task enters waiting loop
+- Internally continues to execute parallel tasks
+- Wake up through sl_wait_break/continue
+
+Characteristics:
+- Writing style is blocking, but the system is not blocked
+
+**4. Design Advantages**
+- **Extremely low overhead**: No stack switching, no context saving
+- **Linear control flow**: Avoids traditional state machine splitting
+- **Unified time driving**: All timing behaviors are managed by tick
+- **Interrupt safety**: Delays execution of complex logic through task_once
+- **Predictable behavior**: Single main process, no competition issues
+
+**5. Limitations**
+- **Single main process**: Cannot have multiple tasks "blocking waiting" simultaneously
+- **Limited synchronization capability**: Waiting mechanism is a global single point
+- **Weak event model**: No queues, no multi-event combination
+- **Dependency on specifications**: All logic must be incorporated into the scheduler
+- **CPU utilization**: Busy polling during waiting
+
+**Summary**
+This mechanism is not an RTOS, but:
+A cooperative execution framework with time-driven as the core, achieving a "near-synchronous" asynchronous programming model at minimal cost.
 
 ## Main Features
 
