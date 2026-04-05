@@ -10,11 +10,11 @@
 
 #include "sloop.h"
 
-#define check_task_not_null()          \
-    if (task == NULL)                  \
-    {                                  \
+#define check_task_not_null()         \
+    if (task == NULL)                 \
+    {                                 \
         sl_error("The task is null"); \
-        return;                        \
+        return;                       \
     }
 
 #define backup_reg(name1, name2)                  \

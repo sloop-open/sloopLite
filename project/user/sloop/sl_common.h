@@ -148,11 +148,12 @@ enum
     FLOW_INIT = FLOW_OFFSET,
     FLOW_FREE,
     FLOW_RUN,
+    FLOW_IDLE,
 };
 
 /* Flow 状态定义 */
-#define FLOW_STATE_DEFINE(name) uint32_t flow_state_##name
-#define FLOW_STATE_DECLARE(name) extern uint32_t flow_state_##name
+#define FLOW_STATE_DEFINE(name) uint32_t flow_state_##name;
+#define FLOW_STATE_DECLARE(name) extern uint32_t flow_state_##name;
 
 /* Flow 启动 */
 #define FLOW_START(name)               \
@@ -166,11 +167,20 @@ enum
 #define FLOW_STOP(name) flow_state_##name = FLOW_FREE
 
 /* Flow 内部上下文 */
-#define _FLOW_CONTEXT(name)        \
-    static uint32_t _flow_tick;    \
-    static uint32_t _flow_state;   \
-    static uint32_t _state_backup; \
-    _flow_state = flow_state_##name;
+#define _FLOW_CONTEXT(name)                  \
+    static uint32_t _flow_tick;              \
+    static uint32_t _flow_state;             \
+    static uint32_t _state_backup;           \
+    if (flow_state_##name == FLOW_INIT)      \
+    {                                        \
+        _flow_state = FLOW_INIT;             \
+        flow_state_##name = FLOW_IDLE;       \
+    }                                        \
+    else if (flow_state_##name == FLOW_FREE) \
+    {                                        \
+        _flow_state = FLOW_FREE;             \
+        flow_state_##name = FLOW_IDLE;       \
+    }
 
 /* 初始化区 */
 #define _FLOW_INIT       \
@@ -197,12 +207,10 @@ enum
     {
 
 /* 结束 */
-#define _FLOW_END(name)     \
-    _flow_state = FLOW_RUN; \
-    break;                  \
-    }                       \
-    }                       \
-    flow_state_##name = _flow_state;
+#define _FLOW_END(name) \
+    break;              \
+    }                   \
+    }
 
 /* ===================== */
 /*      FLOW 原语        */
@@ -225,11 +233,11 @@ enum
     FLOW_UNTIL((uint32_t)(sl_get_tick() - _flow_tick) >= (ms))
 
 /* 事件定义 */
-#define FLOW_EVENT_DEFINE(name) char flow_event_##name
-#define FLOW_EVENT_DECLARE(name) extern char flow_event_##name
+#define FLOW_EVENT_DEFINE(name) char flow_event_##name;
+#define FLOW_EVENT_DECLARE(name) extern char flow_event_##name;
 
 /* 发送事件 */
-#define FLOW_SEND_EVENT(event) flow_event_##event = 1
+#define FLOW_SEND_EVENT(event) flow_event_##event = 1;
 
 /* 等待事件（消费型） */
 #define FLOW_WAIT_EVENT(event)     \
@@ -237,12 +245,10 @@ enum
     flow_event_##event = 0;
 
 /* Flow 内部停止 */
-#define FLOW_EXIT()          \
-    _flow_state = FLOW_FREE; \
-    break;
+#define FLOW_EXIT() _flow_state = FLOW_FREE;
 
 /* 业务状态机跳转 */
-#define FLOW_GOTO(name) _flow_state = name
+#define FLOW_GOTO(name) _flow_state = name;
 
 #endif /* __bl_common_H */
 
