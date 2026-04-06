@@ -143,9 +143,9 @@ void sl_load_new_task(void);
  *  1.Flow 内部不能使用局部变量
     2.flow 内部的用户状态机不能使用flow api,如FLOW_UNTIL
     3.严格遵循 flow 模板
-    _FLOW_CONTEXT
+    _FLOW_CONTEXT(flow_name)
     _FLOW_INIT
-    _FLOW_FREE
+    _FLOW_FREE(flow_name)
     _FLOW_RUN
     _FLOW_END
     4.事件是单一消费模型
@@ -164,34 +164,34 @@ enum
 };
 
 /* Flow 状态定义 */
-#define FLOW_STATE_DEFINE(name) uint32_t flow_state_##name;
-#define FLOW_STATE_DECLARE(name) extern uint32_t flow_state_##name;
+#define FLOW_STATE_DEFINE(flow_name) uint32_t flow_state_##flow_name;
+#define FLOW_STATE_DECLARE(flow_name) extern uint32_t flow_state_##flow_name;
 
 /* Flow 启动 */
-#define FLOW_START(name)               \
-    do                                 \
-    {                                  \
-        flow_state_##name = FLOW_INIT; \
-        sl_task_start(name);           \
+#define FLOW_START(flow_name)               \
+    do                                      \
+    {                                       \
+        flow_state_##flow_name = FLOW_INIT; \
+        sl_task_start(flow_name);           \
     } while (0);
 
 /* Flow 停止（外部） */
-#define FLOW_STOP(name) flow_state_##name = FLOW_FREE
+#define FLOW_STOP(flow_name) flow_state_##flow_name = FLOW_FREE
 
 /* Flow 内部上下文 */
-#define _FLOW_CONTEXT(name)                  \
-    static uint32_t _flow_tick;              \
-    static uint32_t _flow_state;             \
-    static uint32_t _state_backup;           \
-    if (flow_state_##name == FLOW_INIT)      \
-    {                                        \
-        _flow_state = FLOW_INIT;             \
-        flow_state_##name = FLOW_IDLE;       \
-    }                                        \
-    else if (flow_state_##name == FLOW_FREE) \
-    {                                        \
-        _flow_state = FLOW_FREE;             \
-        flow_state_##name = FLOW_IDLE;       \
+#define _FLOW_CONTEXT(flow_name)                  \
+    static uint32_t _flow_tick;                   \
+    static uint32_t _flow_state;                  \
+    static uint32_t _state_backup;                \
+    if (flow_state_##flow_name == FLOW_INIT)      \
+    {                                             \
+        _flow_state = FLOW_INIT;                  \
+        flow_state_##flow_name = FLOW_IDLE;       \
+    }                                             \
+    else if (flow_state_##flow_name == FLOW_FREE) \
+    {                                             \
+        _flow_state = FLOW_FREE;                  \
+        flow_state_##flow_name = FLOW_IDLE;       \
     }
 
 /* 初始化区 */
@@ -202,13 +202,13 @@ enum
     {
 
 /* 清理区 */
-#define _FLOW_FREE(name)    \
-    _flow_state = FLOW_RUN; \
-    break;                  \
-    }                       \
-    case FLOW_FREE:         \
-    {                       \
-        sl_task_stop(name);
+#define _FLOW_FREE(flow_name) \
+    _flow_state = FLOW_RUN;   \
+    break;                    \
+    }                         \
+    case FLOW_FREE:           \
+    {                         \
+        sl_task_stop(flow_name);
 
 /* 运行区 */
 #define _FLOW_RUN            \
@@ -228,15 +228,15 @@ enum
 /*      FLOW 原语        */
 /* ===================== */
 
-#define _FLOW_LINE (FLOW_OFFSET + 1024 + __LINE__)
+#define __FLOW_LINE__ (FLOW_OFFSET + 1024 + __LINE__)
 
 /* 条件等待（核心原语） */
 #define FLOW_UNTIL(cond)             \
     do                               \
     {                                \
         _state_backup = _flow_state; \
-        _flow_state = _FLOW_LINE;    \
-    case _FLOW_LINE:                 \
+        _flow_state = __FLOW_LINE__; \
+    case __FLOW_LINE__:              \
         if (!(cond))                 \
             return;                  \
         _flow_state = _state_backup; \
@@ -251,18 +251,18 @@ enum
     } while (0);
 
 /* 事件定义 */
-#define FLOW_EVENT_DEFINE(name) char flow_event_##name;
-#define FLOW_EVENT_DECLARE(name) extern char flow_event_##name;
+#define FLOW_EVENT_DEFINE(id) char flow_event_##id;
+#define FLOW_EVENT_DECLARE(id) extern char flow_event_##id;
 
 /* 发送事件 */
-#define FLOW_SEND_EVENT(event) flow_event_##event = 1;
+#define FLOW_SEND_EVENT(id) flow_event_##id = 1;
 
 /* 等待事件（消费型） */
-#define FLOW_WAIT_EVENT(event)          \
-    do                                  \
-    {                                   \
-        FLOW_UNTIL(flow_event_##event); \
-        flow_event_##event = 0;         \
+#define FLOW_WAIT_EVENT(id)          \
+    do                               \
+    {                                \
+        FLOW_UNTIL(flow_event_##id); \
+        flow_event_##id = 0;         \
     } while (0);
 
 /* Flow 内部停止 */
@@ -274,7 +274,7 @@ enum
     } while (0);
 
 /* 业务状态机跳转 */
-#define FLOW_GOTO(name) _flow_state = name;
+#define FLOW_GOTO(case_id) _flow_state = case_id;
 
 #endif /* __bl_common_H */
 
