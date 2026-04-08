@@ -49,7 +49,7 @@
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
-int _main(void);
+void _main(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
