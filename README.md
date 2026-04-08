@@ -335,6 +335,55 @@ char sl_wait_bare(void);
 4. **中断处理**：中断中应避免执行复杂逻辑，建议使用 `sl_task_once()` 将复杂逻辑下放
 5. **内存管理**：框架不提供动态内存管理，需要用户自行管理内存
 
+## 移植指南
+
+### 基本移植步骤
+
+1. **系统时钟配置**：确保系统时钟已正确配置，systick 中断周期为 1ms
+
+2. **Systick 中断处理**：在 systick 中断处理函数中添加 `mcu_tick_irq();` 调用，示例：
+   ```c
+   void SysTick_Handler(void)
+   {
+       HAL_IncTick();
+       mcu_tick_irq(); // 调用 sloopLite 时钟更新函数
+   }
+   ```
+
+3. **框架初始化**：在主函数中初始化 sloopLite 框架并启动主循环：
+   ```c
+   int main(void)
+   {
+       // 系统初始化代码
+       
+       sloop_init(); // 初始化 sloopLite 框架
+       
+       while (1)
+       {
+           sloop(); // 运行 sloopLite 主循环
+       }
+   }
+   ```
+
+### 注意事项
+
+1. **RTT 日志支持**：RTT 日志功能基于 SEGGER RTT 技术，仅支持 J-Link 支持的设备，如 ARM Cortex-M0、M3、M4、M7 等系列微控制器
+
+2. **时钟精度**：sloopLite 依赖于 1ms 精度的系统时钟，确保 systick 配置正确
+
+3. **任务数量**：根据目标设备的资源情况，合理调整 `sl_config.h` 中的任务数量上限
+
+4. **中断优先级**：确保 systick 中断优先级设置合理，避免影响系统实时性
+
+### 支持的设备
+
+sloopLite 框架适用于以下类型的设备：
+
+- **ARM Cortex-M 系列**：M0、M0+、M3、M4、M7 等
+- **其他支持 C 语言的微控制器**：只要能提供 1ms 精度的系统时钟，均可移植使用
+
+对于不支持 J-Link 的设备，可以通过修改 `sl_config.h` 中的 `SL_RTT_ENABLE` 宏为 0 来禁用 RTT 日志功能。
+
 ## 许可证
 
 本项目采用 MIT 许可证，详见 LICENSE 文件。
@@ -810,6 +859,55 @@ The main configuration file is located at `project/user/app/config/sl_config.h`,
 3. **Real-time Performance**: Due to the adoption of cooperative scheduling, tasks need to actively yield CPU resources
 4. **Interrupt Handling**: Complex logic should be avoided in interrupts; it is recommended to use `sl_task_once()` to offload complex logic
 5. **Memory Management**: The framework does not provide dynamic memory management; users need to manage memory themselves
+
+## Porting Guide
+
+### Basic Porting Steps
+
+1. **System Clock Configuration**: Ensure the system clock is correctly configured with a 1ms systick interrupt period
+
+2. **Systick Interrupt Handling**: Add `mcu_tick_irq();` call in the systick interrupt handler, example:
+   ```c
+   void SysTick_Handler(void)
+   {
+       HAL_IncTick();
+       mcu_tick_irq(); // Call sloopLite clock update function
+   }
+   ```
+
+3. **Framework Initialization**: Initialize the sloopLite framework and start the main loop in the main function:
+   ```c
+   int main(void)
+   {
+       // System initialization code
+       
+       sloop_init(); // Initialize sloopLite framework
+       
+       while (1)
+       {
+           sloop(); // Run sloopLite main loop
+       }
+   }
+   ```
+
+### Notes
+
+1. **RTT Log Support**: RTT log functionality is based on SEGGER RTT technology and only supports devices supported by J-Link, such as ARM Cortex-M0, M3, M4, M7 series microcontrollers
+
+2. **Clock Accuracy**: sloopLite relies on a 1ms accuracy system clock, ensure systick is configured correctly
+
+3. **Task Quantity**: According to the resource situation of the target device, reasonably adjust the task quantity limits in `sl_config.h`
+
+4. **Interrupt Priority**: Ensure the systick interrupt priority is set appropriately to avoid affecting system real-time performance
+
+### Supported Devices
+
+sloopLite framework is suitable for the following types of devices:
+
+- **ARM Cortex-M series**: M0, M0+, M3, M4, M7, etc.
+- **Other C language supported microcontrollers**: As long as they can provide a 1ms accuracy system clock, they can be ported
+
+For devices that do not support J-Link, the RTT log function can be disabled by modifying the `SL_RTT_ENABLE` macro in `sl_config.h` to 0.
 
 ## License
 
