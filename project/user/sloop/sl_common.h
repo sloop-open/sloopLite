@@ -1,14 +1,14 @@
 /**
  ******************************************************************************
- * @file    bl_common
+ * @file    sl_common
  * @author  sloop
  * @date    2024-12-24
  * @brief   杂项包含
  * ==此文件用户不应变更==
  *****************************************************************************/
 
-#ifndef __bl_common_H
-#define __bl_common_H
+#ifndef __sl_common_H
+#define __sl_common_H
 
 #include "stm32g0xx_hal.h"
 #include "SEGGER_RTT.h"
@@ -276,6 +276,6 @@ enum
 /* 业务状态机跳转 */
 #define FLOW_GOTO(case_id) _flow_state = case_id;
 
-#endif /* __bl_common_H */
+#endif /* __sl_common_H */
 
 /*********************************** END OF FILE ***********************************/
