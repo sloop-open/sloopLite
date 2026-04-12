@@ -78,7 +78,7 @@ void sloop_init(void)
     /* 启用系统心跳 */
     sl_cycle_start(1000, system_heartbeat);
 
-    sl_prt_withFunc("system heartbeat start");
+    sl_printf("system heartbeat start");
 }
 
 /* sloop 系统运行 */

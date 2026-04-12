@@ -551,7 +551,7 @@ void flow1(void)
     _FLOW_RUN;
 
     var++;
-    sl_prt_withFunc("flow1 run, var = %d", var);
+    sl_printf("flow1 run, var = %d", var);
 
     FLOW_WAIT(1000); // Non-blocking wait for 1 second
 
@@ -559,7 +559,7 @@ void flow1(void)
     {
         FLOW_SEND_EVENT(evt1); // Send event to flow2
         FLOW_WAIT_EVENT(evt2); // Wait for flow2's response
-        sl_prt_withFunc("response received");
+        sl_printf("response received");
     }
 
     _FLOW_END;
@@ -612,7 +612,7 @@ void flow1(void)
     _FLOW_RUN; /* Workflow running logic */
 
     var++;
-    sl_prt_withFunc("flow1 run, var = %d", var);
+    sl_printf("flow1 run, var = %d", var);
 
     FLOW_WAIT(1000); // Non-blocking wait for 1 second
 
@@ -620,7 +620,7 @@ void flow1(void)
     {
         FLOW_SEND_EVENT(evt1); // Send event
         FLOW_WAIT_EVENT(evt2); // Wait for response
-        sl_prt_withFunc("response received");
+        sl_printf("response received");
     }
 
     _FLOW_END;
@@ -639,15 +639,15 @@ void flow2(void)
     _FLOW_RUN; /* Workflow running logic */
 
     FLOW_UNTIL(var > 3); // Wait for condition to be met
-    sl_prt_withFunc("condition met");
+    sl_printf("condition met");
 
     FLOW_WAIT_EVENT(evt1); // Wait for event
-    sl_prt_withFunc("event met");
+    sl_printf("event met");
 
     FLOW_SEND_EVENT(evt2); // Reply event
 
     FLOW_WAIT(2000); // Non-blocking wait for 2 seconds
-    sl_prt_withFunc("wait 2s");
+    sl_printf("wait 2s");
 
     _FLOW_END;
 }

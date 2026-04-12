@@ -50,11 +50,11 @@ void flow_user(void)
 
     /* 初次进入工作流，执行一次，初始化工作流上下文 */
     _FLOW_INIT;
-    sl_prt_withFunc("user: Open food delivery APP");
+    sl_printf("user: Open food delivery APP");
 
     /* 工作流结束，不再执行时，释放资源 */
     _FLOW_FREE(flow_user);
-    sl_prt_withFunc("user: Exit");
+    sl_printf("user: Exit");
 
     FLOW_STOP(flow_eat);
     FLOW_STOP(flow_watch);
@@ -63,7 +63,7 @@ void flow_user(void)
     _FLOW_RUN;
 
     /* 下单 */
-    sl_prt_withFunc("user: Place an order");
+    sl_printf("user: Place an order");
     FLOW_SEND_EVENT(evt_order);
 
     FLOW_START(flow_eat);
@@ -85,16 +85,16 @@ void flow_watch(void)
 
     /* 初次进入工作流，执行一次，初始化工作流上下文 */
     _FLOW_INIT;
-    sl_prt_withFunc("watch: Start");
+    sl_printf("watch: Start");
 
     /* 工作流结束，不再执行时，释放资源 */
     _FLOW_FREE(flow_watch);
-    sl_prt_withFunc("watch: Stop");
+    sl_printf("watch: Stop");
 
     /* 下方开始进入工作流运行逻辑 */
     _FLOW_RUN;
 
-    sl_prt_withFunc("user: Watching drama...");
+    sl_printf("user: Watching drama...");
     FLOW_WAIT(1000);
 
     _FLOW_END;
@@ -107,27 +107,27 @@ void flow_delivery(void)
 
     /* 初次进入工作流，执行一次，初始化工作流上下文 */
     _FLOW_INIT;
-    sl_prt_withFunc("delivery: Start");
+    sl_printf("delivery: Start");
 
     /* 工作流结束，不再执行时，释放资源 */
     _FLOW_FREE(flow_delivery);
-    sl_prt_withFunc("delivery: Stop");
+    sl_printf("delivery: Stop");
 
     /* 下方开始进入工作流运行逻辑 */
     _FLOW_RUN;
 
     FLOW_WAIT_EVENT(evt_order);
 
-    sl_prt_withFunc("delivery: Receive order");
+    sl_printf("delivery: Receive order");
 
     FLOW_WAIT(2000);
-    sl_prt_withFunc("delivery: Prepare meal");
+    sl_printf("delivery: Prepare meal");
 
     FLOW_WAIT(3000);
-    sl_prt_withFunc("delivery: Deliver food");
+    sl_printf("delivery: Deliver food");
 
     FLOW_SEND_EVENT(evt_arrive);
-    sl_prt_withFunc("delivery: Delivered");
+    sl_printf("delivery: Delivered");
 
     _FLOW_END;
 }
@@ -139,11 +139,11 @@ void flow_eat(void)
 
     /* 初次进入工作流，执行一次，初始化工作流上下文 */
     _FLOW_INIT;
-    sl_prt_withFunc("eat: Preparing");
+    sl_printf("eat: Preparing");
 
     /* 工作流结束，不再执行时，释放资源 */
     _FLOW_FREE(flow_eat);
-    sl_prt_withFunc("eat: Finish");
+    sl_printf("eat: Finish");
 
     /* 下方开始进入工作流运行逻辑 */
     _FLOW_RUN;
@@ -151,10 +151,10 @@ void flow_eat(void)
     /* 等待外卖送达 */
     FLOW_WAIT_EVENT(evt_arrive);
 
-    sl_prt_withFunc("eat: Takeaway arrived, start eating");
+    sl_printf("eat: Takeaway arrived, start eating");
 
     FLOW_WAIT(2000);
-    sl_prt_withFunc("eat: Finished eating");
+    sl_printf("eat: Finished eating");
 
     FLOW_SEND_EVENT(evt_eat);
 
