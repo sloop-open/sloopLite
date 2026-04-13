@@ -69,12 +69,12 @@ void print_null(const char *sFormat, ...);
 
 /* 系统打印（带时间戳），RTT 简化版本 */
 #define sl_prt_noFunc(sFormat, ...) SEGGER_RTT_printf(0, RTT_CTRL_TEXT_GREEN "\n[%02d %02d:%02d:%02d.%03d] " RTT_CTRL_TEXT_YELLOW sFormat "\n" RTT_CTRL_RESET, \
-                                                  sl_get_tick() / 1000 / 60 / 60 / 24,                                                                     \
-                                                  sl_get_tick() / 1000 / 60 / 60 % 24,                                                                     \
-                                                  sl_get_tick() / 1000 / 60 % 60,                                                                          \
-                                                  sl_get_tick() / 1000 % 60,                                                                               \
-                                                  sl_get_tick() % 1000,                                                                                    \
-                                                  ##__VA_ARGS__)
+                                                      sl_get_tick() / 1000 / 60 / 60 / 24,                                                                     \
+                                                      sl_get_tick() / 1000 / 60 / 60 % 24,                                                                     \
+                                                      sl_get_tick() / 1000 / 60 % 60,                                                                          \
+                                                      sl_get_tick() / 1000 % 60,                                                                               \
+                                                      sl_get_tick() % 1000,                                                                                    \
+                                                      ##__VA_ARGS__)
 
 /* 带函数名的打印 */
 #define sl_printf(sFormat, ...) sl_prt_noFunc(sFormat RTT_CTRL_TEXT_GREEN " <func: %s>" RTT_CTRL_RESET, ##__VA_ARGS__, __func__)
@@ -199,16 +199,18 @@ enum
     switch (_flow_state) \
     {                    \
     case FLOW_INIT:      \
-    {
+    {                    \
+        sl_printf("FLOW_INIT");
 
 /* 清理区 */
-#define _FLOW_FREE(flow_name) \
-    _flow_state = FLOW_RUN;   \
-    break;                    \
-    }                         \
-    case FLOW_FREE:           \
-    {                         \
-        sl_task_stop(flow_name);
+#define _FLOW_FREE(flow_name)    \
+    _flow_state = FLOW_RUN;      \
+    break;                       \
+    }                            \
+    case FLOW_FREE:              \
+    {                            \
+        sl_task_stop(flow_name); \
+        sl_printf("FLOW_FREE");
 
 /* 运行区 */
 #define _FLOW_RUN            \
