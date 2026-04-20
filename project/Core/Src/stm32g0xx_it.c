@@ -159,7 +159,7 @@ void SysTick_Handler(void)
   /* USER CODE END SysTick_IRQn 0 */
   HAL_IncTick();
   /* USER CODE BEGIN SysTick_IRQn 1 */
-  mcu_tick_irq();
+  sl_tick_irq();
   /* USER CODE END SysTick_IRQn 1 */
 }
 

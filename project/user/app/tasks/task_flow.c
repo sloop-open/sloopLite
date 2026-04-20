@@ -28,19 +28,19 @@ void flow_watch(void);
 void task_flow(void)
 {
     /* 首次进入任务时，执行一次 */
-    _INIT;
+    SL_INIT;
 
     FLOW_START(flow_user);
     FLOW_START(flow_delivery);
 
     /* 任务结束、不再执行时，释放资源 */
-    _FREE;
+    SL_FREE;
 
     FLOW_STOP(flow_user);
     FLOW_STOP(flow_delivery);
 
     /* 下方开始进入任务运行逻辑 */
-    _RUN;
+    SL_RUN;
 }
 
 void flow_user(void)

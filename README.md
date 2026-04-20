@@ -309,19 +309,19 @@ char sl_wait_bare(void);
 
 ```c
 // 超时任务上限
-#define TIMEOUT_LIMIT 16
+#define SL_TIMEOUT_LIMIT 16
 
 // 周期任务上限
-#define CYCLE_LIMIT 16
+#define SL_CYCLE_LIMIT 16
 
 // 多次任务上限
-#define MULTIPLE_LIMIT 16
+#define SL_MULTIPLE_LIMIT 16
 
 // 并行任务上限
-#define PARALLEL_TASK_LIMIT 32
+#define SL_PARALLEL_LIMIT 32
 
 // 单次任务上限
-#define ONCE_TASK_LIMIT 16
+#define SL_ONCE_LIMIT 16
 
 // 启用 RTT 打印
 #define SL_RTT_ENABLE 1
@@ -341,12 +341,12 @@ char sl_wait_bare(void);
 
 1. **系统时钟配置**：确保系统时钟已正确配置，systick 中断周期为 1ms
 
-2. **Systick 中断处理**：在 systick 中断处理函数中添加 `mcu_tick_irq();` 调用，示例：
+2. **Systick 中断处理**：在 systick 中断处理函数中添加 `sl_tick_irq();` 调用，示例：
    ```c
    void SysTick_Handler(void)
    {
        HAL_IncTick();
-       mcu_tick_irq(); // 调用 sloopLite 时钟更新函数
+       sl_tick_irq(); // 调用 sloopLite 时钟更新函数
    }
    ```
 
@@ -370,7 +370,7 @@ char sl_wait_bare(void);
 2. 统一的接口 ：无论目标设备是什么，移植步骤基本一致：
    
    - 配置系统时钟
-   - 在中断中添加 mcu_tick_irq() 调用
+   - 在中断中添加 sl_tick_irq() 调用
    - 初始化框架并启动主循环
 3. 灵活的配置 ：通过 sl_config.h 文件，可以根据目标设备的资源情况调整任务数量等参数，适应不同硬件的能力。
 4. 模块化设计 ：框架核心与硬件相关的部分被隔离，移植时主要关注时钟和中断处理，其他部分无需修改。
@@ -854,19 +854,19 @@ The main configuration file is located at `project/user/app/config/sl_config.h`,
 
 ```c
 // Timeout task limit
-#define TIMEOUT_LIMIT 16
+#define SL_TIMEOUT_LIMIT 16
 
 // Cycle task limit
-#define CYCLE_LIMIT 16
+#define SL_CYCLE_LIMIT 16
 
 // Multiple task limit
-#define MULTIPLE_LIMIT 16
+#define SL_MULTIPLE_LIMIT 16
 
 // Parallel task limit
-#define PARALLEL_TASK_LIMIT 32
+#define SL_PARALLEL_LIMIT 32
 
 // Once task limit
-#define ONCE_TASK_LIMIT 16
+#define SL_ONCE_LIMIT 16
 
 // Enable RTT print
 #define SL_RTT_ENABLE 1
@@ -886,12 +886,12 @@ The main configuration file is located at `project/user/app/config/sl_config.h`,
 
 1. **System Clock Configuration**: Ensure the system clock is correctly configured with a 1ms systick interrupt period
 
-2. **Systick Interrupt Handling**: Add `mcu_tick_irq();` call in the systick interrupt handler, example:
+2. **Systick Interrupt Handling**: Add `sl_tick_irq();` call in the systick interrupt handler, example:
    ```c
    void SysTick_Handler(void)
    {
        HAL_IncTick();
-       mcu_tick_irq(); // Call sloopLite clock update function
+       sl_tick_irq(); // Call sloopLite clock update function
    }
    ```
 

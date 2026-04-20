@@ -11,19 +11,19 @@
 #define __sl_config_H
 
 /* 超时任务上限 */
-#define TIMEOUT_LIMIT 16
+#define SL_TIMEOUT_LIMIT 16
 
 /* 周期任务上限 */
-#define CYCLE_LIMIT 16
+#define SL_CYCLE_LIMIT 16
 
 /* 多次任务上限 */
-#define MULTIPLE_LIMIT 16
+#define SL_MULTIPLE_LIMIT 16
 
 /* 并行任务上限 */
-#define PARALLEL_TASK_LIMIT 32
+#define SL_PARALLEL_LIMIT 32
 
 /* 单次任务上限 */
-#define ONCE_TASK_LIMIT 16
+#define SL_ONCE_LIMIT 16
 
 /* ============================================================== */
 

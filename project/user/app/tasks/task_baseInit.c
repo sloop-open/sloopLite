@@ -12,15 +12,15 @@
 void task_baseInit(void)
 {
     /* 初次进入任务时，执行一次 */
-    _INIT;
+    SL_INIT;
 
     sl_goto(task_flow);
 
     /* 任务结束，不再执行时，释放资源 */
-    _FREE;
+    SL_FREE;
 
     /* 下方开始进入任务运行逻辑 */
-    _RUN;
+    SL_RUN;
 }
 
 /************************** END OF FILE **************************/

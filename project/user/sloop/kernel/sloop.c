@@ -10,15 +10,15 @@
 
 #include "sloop.h"
 
-#define check_task_not_null()         \
+#define sl_check_task_not_null()      \
     if (task == NULL)                 \
     {                                 \
         sl_error("The task is null"); \
         return;                       \
     }
 
-#define backup_reg(name1, name2)                  \
-    static name1##_typ backup_reg[name2##_LIMIT]; \
+#define sl_backup_reg(name1, name2)                    \
+    static name1##_typ backup_reg[SL_##name2##_LIMIT]; \
     memcpy(backup_reg, name1##_reg, sizeof backup_reg);
 
 void print_null(const char *sFormat, ...) {}
@@ -94,7 +94,7 @@ void sloop(void)
 /* ============================================================== */
 
 /* mcu tick 中断 */
-void mcu_tick_irq(void)
+void sl_tick_irq(void)
 {
     tick++;
 
@@ -223,7 +223,7 @@ typedef struct
 } timeout_typ;
 
 /* 超时任务注册表 */
-static timeout_typ timeout_reg[TIMEOUT_LIMIT];
+static timeout_typ timeout_reg[SL_TIMEOUT_LIMIT];
 
 /* 超时任务运行 */
 void timeout_run(void)
@@ -232,9 +232,9 @@ void timeout_run(void)
     int delay_ms;
 
     /* 防止回调中改写注册表 */
-    backup_reg(timeout, TIMEOUT);
+    sl_backup_reg(timeout, TIMEOUT);
 
-    for (int i = 0; i < TIMEOUT_LIMIT; i++)
+    for (int i = 0; i < SL_TIMEOUT_LIMIT; i++)
     {
         if (backup_reg[i].callback == NULL)
             continue;
@@ -256,12 +256,12 @@ void timeout_run(void)
 /* 超时任务 */
 void sl_timeout_start(int ms, pfunc task)
 {
-    check_task_not_null();
+    sl_check_task_not_null();
 
     /* 传入1ms，实际延时至少1ms */
     ms == 1 ? ms++ : ms;
 
-    for (int i = 0; i < TIMEOUT_LIMIT; i++)
+    for (int i = 0; i < SL_TIMEOUT_LIMIT; i++)
     {
         if (timeout_reg[i].callback == task)
         {
@@ -273,7 +273,7 @@ void sl_timeout_start(int ms, pfunc task)
     }
 
     /* 如未注册，这里先注册 */
-    for (int i = 0; i < TIMEOUT_LIMIT; i++)
+    for (int i = 0; i < SL_TIMEOUT_LIMIT; i++)
     {
         if (timeout_reg[i].callback == NULL)
         {
@@ -287,14 +287,14 @@ void sl_timeout_start(int ms, pfunc task)
         }
     }
 
-    sl_error("timeout task overflow, limit %2d", TIMEOUT_LIMIT);
+    sl_error("timeout task overflow, limit %2d", SL_TIMEOUT_LIMIT);
 }
 
 void sl_timeout_stop(pfunc task)
 {
-    check_task_not_null();
+    sl_check_task_not_null();
 
-    for (int i = 0; i < TIMEOUT_LIMIT; i++)
+    for (int i = 0; i < SL_TIMEOUT_LIMIT; i++)
     {
         if (timeout_reg[i].callback == task)
         {
@@ -320,7 +320,7 @@ typedef struct
 } cycle_typ;
 
 /* 周期任务注册表 */
-static cycle_typ cycle_reg[CYCLE_LIMIT];
+static cycle_typ cycle_reg[SL_CYCLE_LIMIT];
 
 /* 周期任务运行 */
 void cycle_run(void)
@@ -329,9 +329,9 @@ void cycle_run(void)
     int delay_ms;
 
     /* 防止回调中改写注册表 */
-    backup_reg(cycle, CYCLE);
+    sl_backup_reg(cycle, CYCLE);
 
-    for (int i = 0; i < CYCLE_LIMIT; i++)
+    for (int i = 0; i < SL_CYCLE_LIMIT; i++)
     {
         if (backup_reg[i].callback == NULL)
             continue;
@@ -353,9 +353,9 @@ void cycle_run(void)
 /* 周期任务 */
 void sl_cycle_start(int ms, pfunc task)
 {
-    check_task_not_null();
+    sl_check_task_not_null();
 
-    for (int i = 0; i < CYCLE_LIMIT; i++)
+    for (int i = 0; i < SL_CYCLE_LIMIT; i++)
     {
         if (cycle_reg[i].callback == task)
         {
@@ -370,7 +370,7 @@ void sl_cycle_start(int ms, pfunc task)
     }
 
     /* 如未注册，这里先注册 */
-    for (int i = 0; i < CYCLE_LIMIT; i++)
+    for (int i = 0; i < SL_CYCLE_LIMIT; i++)
     {
         if (cycle_reg[i].callback == NULL)
         {
@@ -388,14 +388,14 @@ void sl_cycle_start(int ms, pfunc task)
         }
     }
 
-    sl_error("cycle task overflow, limit %2d", CYCLE_LIMIT);
+    sl_error("cycle task overflow, limit %2d", SL_CYCLE_LIMIT);
 }
 
 void sl_cycle_stop(pfunc task)
 {
-    check_task_not_null();
+    sl_check_task_not_null();
 
-    for (int i = 0; i < CYCLE_LIMIT; i++)
+    for (int i = 0; i < SL_CYCLE_LIMIT; i++)
     {
         if (cycle_reg[i].callback == task)
         {
@@ -423,7 +423,7 @@ typedef struct
 } multiple_typ;
 
 /* 多次任务注册表 */
-static multiple_typ multiple_reg[MULTIPLE_LIMIT];
+static multiple_typ multiple_reg[SL_MULTIPLE_LIMIT];
 
 /* 多次任务运行 */
 void multiple_run(void)
@@ -432,9 +432,9 @@ void multiple_run(void)
     int delay_ms;
 
     /* 防止回调中改写注册表 */
-    backup_reg(multiple, MULTIPLE);
+    sl_backup_reg(multiple, MULTIPLE);
 
-    for (int i = 0; i < MULTIPLE_LIMIT; i++)
+    for (int i = 0; i < SL_MULTIPLE_LIMIT; i++)
     {
         if (backup_reg[i].callback == NULL)
             continue;
@@ -464,7 +464,7 @@ void multiple_run(void)
 /* 多次任务 */
 void sl_multiple_start(int num, int ms, pfunc task)
 {
-    check_task_not_null();
+    sl_check_task_not_null();
 
     if (num == 0)
         return;
@@ -478,7 +478,7 @@ void sl_multiple_start(int num, int ms, pfunc task)
         return;
     }
 
-    for (int i = 0; i < MULTIPLE_LIMIT; i++)
+    for (int i = 0; i < SL_MULTIPLE_LIMIT; i++)
     {
         if (multiple_reg[i].callback == task)
         {
@@ -493,7 +493,7 @@ void sl_multiple_start(int num, int ms, pfunc task)
     }
 
     /* 如未注册，这里先注册 */
-    for (int i = 0; i < MULTIPLE_LIMIT; i++)
+    for (int i = 0; i < SL_MULTIPLE_LIMIT; i++)
     {
         if (multiple_reg[i].callback == NULL)
         {
@@ -513,14 +513,14 @@ void sl_multiple_start(int num, int ms, pfunc task)
         }
     }
 
-    sl_error("multiple task overflow, limit %2d", MULTIPLE_LIMIT);
+    sl_error("multiple task overflow, limit %2d", SL_MULTIPLE_LIMIT);
 }
 
 void sl_multiple_stop(pfunc task)
 {
-    check_task_not_null();
+    sl_check_task_not_null();
 
-    for (int i = 0; i < MULTIPLE_LIMIT; i++)
+    for (int i = 0; i < SL_MULTIPLE_LIMIT; i++)
     {
         if (multiple_reg[i].callback == task)
         {
@@ -535,12 +535,12 @@ void sl_multiple_stop(pfunc task)
 /* ============================================================== */
 
 /* 并行任务注册表 */
-static pfunc task_reg[PARALLEL_TASK_LIMIT];
+static pfunc task_reg[SL_PARALLEL_LIMIT];
 
 /* 并行任务运行 */
 void parallel_task_run(void)
 {
-    for (int i = 0; i < PARALLEL_TASK_LIMIT; i++)
+    for (int i = 0; i < SL_PARALLEL_LIMIT; i++)
     {
         if (task_reg[i] == NULL)
             continue;
@@ -552,9 +552,9 @@ void parallel_task_run(void)
 /* 并行任务 */
 void sl_task_start(pfunc task)
 {
-    check_task_not_null();
+    sl_check_task_not_null();
 
-    for (int i = 0; i < PARALLEL_TASK_LIMIT; i++)
+    for (int i = 0; i < SL_PARALLEL_LIMIT; i++)
     {
         if (task_reg[i] == task)
         {
@@ -562,7 +562,7 @@ void sl_task_start(pfunc task)
         }
     }
 
-    for (int i = 0; i < PARALLEL_TASK_LIMIT; i++)
+    for (int i = 0; i < SL_PARALLEL_LIMIT; i++)
     {
         if (task_reg[i] == NULL)
         {
@@ -572,14 +572,14 @@ void sl_task_start(pfunc task)
         }
     }
 
-    sl_error("parallel task overflow, limit %2d", PARALLEL_TASK_LIMIT);
+    sl_error("parallel task overflow, limit %2d", SL_PARALLEL_LIMIT);
 }
 
 void sl_task_stop(pfunc task)
 {
-    check_task_not_null();
+    sl_check_task_not_null();
 
-    for (int i = 0; i < PARALLEL_TASK_LIMIT; i++)
+    for (int i = 0; i < SL_PARALLEL_LIMIT; i++)
     {
         if (task_reg[i] == task)
         {
@@ -593,19 +593,19 @@ void sl_task_stop(pfunc task)
 /* ============================================================== */
 
 /* 单次任务注册表 */
-static pfunc once_task_reg[ONCE_TASK_LIMIT];
+static pfunc once_task_reg[SL_ONCE_LIMIT];
 
 static int soft_timer_count;
 
 /* 单次任务运行 */
 void once_task_run(void)
 {
-    static pfunc backup_reg[ONCE_TASK_LIMIT];
+    static pfunc backup_reg[SL_ONCE_LIMIT];
 
     /* 防止回调中改写注册表 */
     memcpy(backup_reg, once_task_reg, sizeof backup_reg);
 
-    for (int i = 0; i < ONCE_TASK_LIMIT; i++)
+    for (int i = 0; i < SL_ONCE_LIMIT; i++)
     {
         if (backup_reg[i] == NULL)
             continue;
@@ -623,9 +623,9 @@ void once_task_run(void)
 /* 单次任务 */
 void sl_task_once(pfunc task)
 {
-    check_task_not_null();
+    sl_check_task_not_null();
 
-    for (int i = 0; i < ONCE_TASK_LIMIT; i++)
+    for (int i = 0; i < SL_ONCE_LIMIT; i++)
     {
         if (once_task_reg[i] == task)
         {
@@ -642,7 +642,7 @@ void sl_task_once(pfunc task)
         }
     }
 
-    for (int i = 0; i < ONCE_TASK_LIMIT; i++)
+    for (int i = 0; i < SL_ONCE_LIMIT; i++)
     {
         if (once_task_reg[i] == NULL)
         {
@@ -652,21 +652,21 @@ void sl_task_once(pfunc task)
         }
     }
 
-    sl_error("once task overflow, limit %2d", ONCE_TASK_LIMIT);
+    sl_error("once task overflow, limit %2d", SL_ONCE_LIMIT);
 }
 
 /* ============================================================== */
 
 static char wait;
-char _init;
-char _free;
+char sl_init;
+char sl_free;
 static pfunc run_task;
 static pfunc pre_task;
 
 /* 互斥任务切换 */
 void sl_goto(pfunc task)
 {
-    check_task_not_null();
+    sl_check_task_not_null();
 
     if (wait)
     {
@@ -679,14 +679,14 @@ void sl_goto(pfunc task)
     {
         run_task = task;
 
-        _init = 1;
+        sl_init = 1;
 
         return;
     }
 
     pre_task = task;
 
-    _free = 1;
+    sl_free = 1;
 }
 
 /* 加载新任务 */

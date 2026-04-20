@@ -18,7 +18,7 @@ void sloop_init(void);
 void sloop(void);
 
 /* MCU tick 中断 */
-void mcu_tick_irq(void);
+void sl_tick_irq(void);
 
 /* 获取时间戳 */
 uint32_t sl_get_tick(void);

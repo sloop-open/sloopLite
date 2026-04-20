@@ -17,42 +17,26 @@
 #include "stdio.h"
 #include "sl_config.h"
 
-#ifndef __weak
-#define __weak __attribute__((weak))
-#endif /* __weak */
-#ifndef __packed
-#define __packed __attribute__((packed))
-#endif /* __packed */
+#define sl_weak __attribute__((weak))
 
-/* 状态机枚举 */
-enum
-{
-    step1,
-    step2,
-    step3,
-    step4,
-    step5,
-    step6,
-    step7,
-    step8
-};
+#define sl_packed __attribute__((packed))
 
 /* 中断优先级 */
-#define PRIO_HIGHEST 0
-#define PRIO_LOWEST 15
-#define PRIO_DEFAULT 5
+#define SL_PRIO_HIGHEST 0
+#define SL_PRIO_LOWEST 15
+#define SL_PRIO_DEFAULT 5
 
 /* 简化函数指针定义 */
 typedef void (*pfunc)(void);
 
 /* 弱定义func */
 #define weak_define(func) \
-    __weak void func(void) {}
+    sl_weak void func(void) {}
 
 /* 循环自增，举例：add(i, 6) i = [0,6] 循环自增 */
-#define add(i, upper) i = (i == upper) ? 0 : i + 1
+#define sl_add(i, upper) i = (i == upper) ? 0 : i + 1
 /* 循环自减，举例：sub(i, 6) i = [6,0] 循环自减 */
-#define sub(i, upper) i = (i == 0) ? upper : i - 1
+#define sl_sub(i, upper) i = (i == 0) ? upper : i - 1
 
 /* ============================================================== */
 /* 打印 API */
@@ -109,30 +93,30 @@ void print_null(const char *sFormat, ...);
 /* ============================================================== */
 /* 互斥任务相关服务 */
 
-extern char _init;
-extern char _free;
+extern char sl_init;
+extern char sl_free;
 
 /* 加载新任务 */
 void sl_load_new_task(void);
 
 /* 任务初始化宏 */
-#define _INIT                           \
-    if (_init == 1)                     \
+#define SL_INIT                         \
+    if (sl_init == 1)                   \
     {                                   \
         sl_focus("enter %s", __func__); \
-        _init = 0;
+        sl_init = 0;
 
 /* 任务释放宏 */
-#define _FREE       \
-    }               \
-    if (_free == 1) \
+#define SL_FREE       \
+    }                 \
+    if (sl_free == 1) \
     {
 
-#define _RUN                       \
+#define SL_RUN                     \
     sl_focus("exit %s", __func__); \
     sl_load_new_task();            \
-    _init = 1;                     \
-    _free = 0;                     \
+    sl_init = 1;                   \
+    sl_free = 0;                   \
     return;                        \
     }
 
