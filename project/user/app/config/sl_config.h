@@ -11,7 +11,7 @@
 #define __sl_config_H
 
 /* 超时任务上限 */
-#define SL_TIMEOUT_LIMIT 16 
+#define SL_TIMEOUT_LIMIT 16
 
 /* 周期任务上限 */
 #define SL_CYCLE_LIMIT 16
