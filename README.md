@@ -45,16 +45,16 @@ sloopLite 是一个专为资源受限型微控制器设计的轻量级嵌入式任务调度框架。它采用单线
 形成 "时间驱动 + 主流程" 的组合执行模型。
 
 ### 生命周期机制
-通过 `_INIT`/`_FREE`/`_RUN` 将任务拆成三个阶段：
-- **_INIT**：首次进入执行一次（初始化资源、启动定时器等）
-- **_RUN**：主逻辑区（循环执行）
-- **_FREE**：任务切换时执行（释放资源）
+通过 `SL_INIT`/`SL_FREE`/`SL_RUN` 将任务拆成三个阶段：
+- **SL_INIT**：首次进入执行一次（初始化资源、启动定时器等）
+- **SL_RUN**：主逻辑区（循环执行）
+- **SL_FREE**：任务切换时执行（释放资源）
 
 任务切换由 `sl_goto()` 触发，本质是：
-1. 标记 `_free`
-2. 下一轮执行 `_FREE`
+1. 标记 `sl_free`
+2. 下一轮执行 `SL_FREE`
 3. 加载新任务（`sl_load_new_task`）
-4. 重新进入 `_INIT`
+4. 重新进入 `SL_INIT`
 
 ### 同步机制
 通过 `sl_wait`/`sl_wait_bare` 提供 "伪阻塞" 能力：
@@ -329,7 +329,7 @@ char sl_wait_bare(void);
 
 ## 注意事项
 
-1. **任务设计**：互斥任务需要使用 `_INIT`、`_FREE` 和 `_RUN` 宏来管理任务的生命周期
+1. **任务设计**：互斥任务需要使用 `SL_INIT`、`SL_FREE` 和 `SL_RUN` 宏来管理任务的生命周期
 2. **资源限制**：每种任务类型都有数量上限，超过上限会导致任务创建失败
 3. **实时性**：由于采用协作式调度，任务需要主动让出 CPU 资源
 4. **中断处理**：中断中应避免执行复杂逻辑，建议使用 `sl_task_once()` 将复杂逻辑下放
@@ -465,16 +465,16 @@ At the same time, the tick interrupt triggers `soft_timer`, driving:
 Forming a "time-driven + main process" combined execution model.
 
 ### Lifecycle Mechanism
-Tasks are split into three stages through `_INIT`/`_FREE`/`_RUN`:
-- **_INIT**: Executes once on first entry (initialize resources, start timers, etc.)
-- **_RUN**: Main logic area (executed in a loop)
-- **_FREE**: Executed during task switching (release resources)
+Tasks are split into three stages through `SL_INIT`/`SL_FREE`/`SL_RUN`:
+- **SL_INIT**: Executes once on first entry (initialize resources, start timers, etc.)
+- **SL_RUN**: Main logic area (executed in a loop)
+- **SL_FREE**: Executed during task switching (release resources)
 
 Task switching is triggered by `sl_goto()`, essentially:
-1. Mark `_free`
-2. Execute `_FREE` in the next round
+1. Mark `sl_free`
+2. Execute `SL_FREE` in the next round
 3. Load new task (`sl_load_new_task`)
-4. Re-enter `_INIT`
+4. Re-enter `SL_INIT`
 
 ### Synchronization Mechanism
 Provides "pseudo-blocking" capability through `sl_wait`/`sl_wait_bare`:
@@ -510,158 +510,34 @@ Lifecycle switching is controlled externally via `FLOW_START`/`FLOW_STOP`, and c
 ### Key Advantage
 **Linear synchronous writing**: Traditional state machines need to be split into multiple states + jumps, while here complex processes can be expressed with "sequential code", logic is closer to human thinking paths, significantly reducing state explosion and readability costs.
 
-### Basic Usage
-
-#### 1. Define Flow States and Events
-```c
-FLOW_STATE_DEFINE(flow1);
-FLOW_EVENT_DEFINE(evt1);
-
-FLOW_STATE_DEFINE(flow2);
-FLOW_EVENT_DEFINE(evt2);
-```
-
-#### 2. Start and Stop Flow
-```c
-// Start Flow
-FLOW_START(flow1);
-FLOW_START(flow2);
-
-// Stop Flow
-FLOW_STOP(flow1);
-FLOW_STOP(flow2);
-```
-
-#### 3. Flow Implementation
-```c
-void flow1(void)
-{
-    // Workflow context, workflow data is statically defined here
-    SL_FLOW_CONTEXT(flow1);
-
-    // First entry into workflow, execute once, initialize workflow context
-    SL_FLOW_INIT;
-    sl_focus("flow1 start");
-
-    // Workflow ends, no longer execute, release resources
-    SL_FLOW_FREE(flow1);
-    sl_focus("flow1 stop");
-
-    // Below starts entering workflow running logic
-    SL_FLOW_RUN;
-
-    var++;
-    sl_printf("flow1 run, var = %d", var);
-
-    FLOW_WAIT(1000); // Non-blocking wait for 1 second
-
-    if (var == 6)
-    {
-        FLOW_SEND_EVENT(evt1); // Send event to flow2
-        FLOW_WAIT_EVENT(evt2); // Wait for flow2's response
-        sl_printf("response received");
-    }
-
-    SL_FLOW_END;
-}
-```
-
-### Complete Example
-
-The following is a complete Flow programming example showing collaboration between two Flows:
-
-```c
-#include "common.h"
-
-// Define Flow states and events
-FLOW_STATE_DEFINE(flow1);
-FLOW_EVENT_DEFINE(evt1);
-
-FLOW_STATE_DEFINE(flow2);
-FLOW_EVENT_DEFINE(evt2);
-
-static char var;
-
-void task_flow(void)
-{
-    _INIT; /* Execute once when first entering the task */
-
-    // Start workflow
-    FLOW_START(flow1);
-    FLOW_START(flow2);
-
-    _FREE; /* Task ends, no longer execute, release resources */
-
-    // Stop workflow
-    FLOW_STOP(flow1);
-    FLOW_STOP(flow2);
-
-    _RUN; /* Below starts entering task running logic */
-}
-
-void flow1(void)
-{
-    SL_FLOW_CONTEXT(flow1); /* Workflow context */
-
-    SL_FLOW_INIT; /* Initialize workflow */
-    sl_focus("flow1 start");
-
-    SL_FLOW_FREE(flow1); /* Release resources when workflow ends */
-    sl_focus("flow1 stop");
-
-    SL_FLOW_RUN; /* Workflow running logic */
-
-    var++;
-    sl_printf("flow1 run, var = %d", var);
-
-    FLOW_WAIT(1000); // Non-blocking wait for 1 second
-
-    if (var == 6)
-    {
-        FLOW_SEND_EVENT(evt1); // Send event
-        FLOW_WAIT_EVENT(evt2); // Wait for response
-        sl_printf("response received");
-    }
-
-    SL_FLOW_END;
-}
-
-void flow2(void)
-{
-    SL_FLOW_CONTEXT(flow2); /* Workflow context */
-
-    SL_FLOW_INIT; /* Initialize workflow */
-    sl_focus("flow2 start");
-
-    SL_FLOW_FREE(flow2); /* Release resources when workflow ends */
-    sl_focus("flow2 stop");
-
-    SL_FLOW_RUN; /* Workflow running logic */
-
-    FLOW_UNTIL(var > 3); // Wait for condition to be met
-    sl_printf("condition met");
-
-    FLOW_WAIT_EVENT(evt1); // Wait for event
-    sl_printf("event met");
-
-    FLOW_SEND_EVENT(evt2); // Reply event
-
-    FLOW_WAIT(2000); // Non-blocking wait for 2 seconds
-    sl_printf("wait 2s");
-
-    SL_FLOW_END;
-}
-```
-
 ### Flow Paradigm
 
-Flow workflow is written using a standard paradigm, including the following key parts:
+Flow workflow is written using a standard paradigm, including context definition, initialization, release, and running logic:
 
-1. **Context Definition**: Use `SL_FLOW_CONTEXT(flow_name)` to define the workflow context, where workflow data is statically defined
-2. **Initialization Phase**: Use `SL_FLOW_INIT` to mark initialization code, executed only once
-3. **Release Phase**: Use `SL_FLOW_FREE(flow_name)` to mark release code, executed when the workflow ends
-4. **Running Logic**: Use `SL_FLOW_RUN` to mark the main running logic of the workflow
-5. **End Mark**: Use `SL_FLOW_END` to mark the end of the workflow
+```c
+void flow2(void)
+{
+    /* Workflow context, workflow data is statically defined here */
+    SL_FLOW_CONTEXT(flow2);
+
+    /* First entry into workflow, execute once, initialize workflow context */
+    SL_FLOW_INIT;
+
+    /* Workflow ends, no longer execute, release resources */
+    SL_FLOW_FREE(flow2);
+
+    /* Below starts entering workflow running logic */
+    SL_FLOW_RUN;
+
+    FLOW_UNTIL(var > 3);
+
+    FLOW_WAIT_EVENT(evt1);
+
+    FLOW_WAIT(2000);
+
+    SL_FLOW_END;
+}
+```
 
 ### Flow Macro Definitions
 
@@ -874,7 +750,7 @@ The main configuration file is located at `project/user/app/config/sl_config.h`,
 
 ## Notes
 
-1. **Task Design**: Mutex tasks need to use `_INIT`, `_FREE`, and `_RUN` macros to manage task lifecycle
+1. **Task Design**: Mutex tasks need to use `SL_INIT`, `SL_FREE`, and `SL_RUN` macros to manage task lifecycle
 2. **Resource Limits**: Each task type has a predefined quantity limit, exceeding the limit will cause task creation to fail
 3. **Real-time Performance**: Due to the adoption of cooperative scheduling, tasks need to actively yield CPU resources
 4. **Interrupt Handling**: Complex logic should be avoided in interrupts; it is recommended to use `sl_task_once()` to offload complex logic
@@ -909,6 +785,28 @@ The main configuration file is located at `project/user/app/config/sl_config.h`,
        }
    }
    ```
+
+### Porting-Friendly Core Advantages
+1. **Minimal Dependencies**: sloopLite has almost no external dependencies, only requiring a 1ms precision system clock, which can be easily implemented on most microcontrollers.
+2. **Unified Interface**: Regardless of the target device, the porting steps are basically the same:
+   
+   - Configure system clock
+   - Add `sl_tick_irq()` call in interrupt handler
+   - Initialize framework and start main loop
+3. **Flexible Configuration**: Through the `sl_config.h` file, parameters such as task quantity can be adjusted according to the resource situation of the target device to adapt to different hardware capabilities.
+4. **Modular Design**: The framework core is isolated from hardware-related parts, so porting mainly focuses on clock and interrupt handling, and other parts do not need to be modified.
+5. **Optional RTT Logging**: For devices that do not support J-Link, the RTT logging function can be disabled through simple macro definition modification without affecting core functionality.
+
+### Actual Porting Experience
+From practical operation, porting sloopLite to a new MCU usually only requires:
+
+- A few lines of code modification (mainly the interrupt handler function)
+- Simple configuration adjustments
+- No need to modify the framework core code
+
+This design concept is very suitable for embedded development needs, especially in resource-constrained environments. A simple, reliable, and easy-to-port framework can greatly reduce development and maintenance costs.
+
+The porting friendliness of sloopLite also reflects its lightweight design goal. By minimizing hardware dependencies and simplifying the porting process, developers can focus more on implementing application logic rather than framework adaptation issues.
 
 ### Notes
 
