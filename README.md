@@ -98,16 +98,16 @@ Flow工作流采用标准范式编写，包含上下文定义、初始化、释放和运行逻辑等部分：
 void flow2(void)
 {
     /* 工作流上下文，工作流需要的数据在此静态定义 */
-    _FLOW_CONTEXT(flow2);
+    SL_FLOW_CONTEXT(flow2);
 
     /* 初次进入工作流，执行一次，初始化工作流上下文 */
-    _FLOW_INIT;
+    SL_FLOW_INIT;
 
     /* 工作流结束，不再执行时，释放资源 */
-    _FLOW_FREE(flow2);
+    SL_FLOW_FREE(flow2);
 
     /* 下方开始进入工作流运行逻辑 */
-    _FLOW_RUN;
+    SL_FLOW_RUN;
 
     FLOW_UNTIL(var > 3);
 
@@ -115,7 +115,7 @@ void flow2(void)
 
     FLOW_WAIT(2000);
 
-    _FLOW_END;
+    SL_FLOW_END;
 }
 ```
 
@@ -129,11 +129,11 @@ Flow 框架提供了以下核心宏：
 | `FLOW_EVENT_DEFINE(event_name)` | 定义 Flow 事件变量 |
 | `FLOW_START(flow_name)` | 启动 Flow |
 | `FLOW_STOP(flow_name)` | 停止 Flow |
-| `_FLOW_CONTEXT(flow_name)` | 定义 Flow 上下文 |
-| `_FLOW_INIT` | 标记初始化代码 |
-| `_FLOW_FREE(flow_name)` | 标记释放代码 |
-| `_FLOW_RUN` | 标记运行逻辑 |
-| `_FLOW_END` | 标记 Flow 结束 |
+| `SL_FLOW_CONTEXT(flow_name)` | 定义 Flow 上下文 |
+| `SL_FLOW_INIT` | 标记初始化代码 |
+| `SL_FLOW_FREE(flow_name)` | 标记释放代码 |
+| `SL_FLOW_RUN` | 标记运行逻辑 |
+| `SL_FLOW_END` | 标记 Flow 结束 |
 | `FLOW_UNTIL(condition)` | 等待条件满足 |
 | `FLOW_WAIT(ms)` | 非阻塞等待指定时间 |
 | `FLOW_WAIT_EVENT(event_name)` | 等待事件触发 |
@@ -537,18 +537,18 @@ FLOW_STOP(flow2);
 void flow1(void)
 {
     // Workflow context, workflow data is statically defined here
-    _FLOW_CONTEXT(flow1);
+    SL_FLOW_CONTEXT(flow1);
 
     // First entry into workflow, execute once, initialize workflow context
-    _FLOW_INIT;
+    SL_FLOW_INIT;
     sl_focus("flow1 start");
 
     // Workflow ends, no longer execute, release resources
-    _FLOW_FREE(flow1);
+    SL_FLOW_FREE(flow1);
     sl_focus("flow1 stop");
 
     // Below starts entering workflow running logic
-    _FLOW_RUN;
+    SL_FLOW_RUN;
 
     var++;
     sl_printf("flow1 run, var = %d", var);
@@ -562,7 +562,7 @@ void flow1(void)
         sl_printf("response received");
     }
 
-    _FLOW_END;
+    SL_FLOW_END;
 }
 ```
 
@@ -601,15 +601,15 @@ void task_flow(void)
 
 void flow1(void)
 {
-    _FLOW_CONTEXT(flow1); /* Workflow context */
+    SL_FLOW_CONTEXT(flow1); /* Workflow context */
 
-    _FLOW_INIT; /* Initialize workflow */
+    SL_FLOW_INIT; /* Initialize workflow */
     sl_focus("flow1 start");
 
-    _FLOW_FREE(flow1); /* Release resources when workflow ends */
+    SL_FLOW_FREE(flow1); /* Release resources when workflow ends */
     sl_focus("flow1 stop");
 
-    _FLOW_RUN; /* Workflow running logic */
+    SL_FLOW_RUN; /* Workflow running logic */
 
     var++;
     sl_printf("flow1 run, var = %d", var);
@@ -623,20 +623,20 @@ void flow1(void)
         sl_printf("response received");
     }
 
-    _FLOW_END;
+    SL_FLOW_END;
 }
 
 void flow2(void)
 {
-    _FLOW_CONTEXT(flow2); /* Workflow context */
+    SL_FLOW_CONTEXT(flow2); /* Workflow context */
 
-    _FLOW_INIT; /* Initialize workflow */
+    SL_FLOW_INIT; /* Initialize workflow */
     sl_focus("flow2 start");
 
-    _FLOW_FREE(flow2); /* Release resources when workflow ends */
+    SL_FLOW_FREE(flow2); /* Release resources when workflow ends */
     sl_focus("flow2 stop");
 
-    _FLOW_RUN; /* Workflow running logic */
+    SL_FLOW_RUN; /* Workflow running logic */
 
     FLOW_UNTIL(var > 3); // Wait for condition to be met
     sl_printf("condition met");
@@ -649,7 +649,7 @@ void flow2(void)
     FLOW_WAIT(2000); // Non-blocking wait for 2 seconds
     sl_printf("wait 2s");
 
-    _FLOW_END;
+    SL_FLOW_END;
 }
 ```
 
@@ -657,11 +657,11 @@ void flow2(void)
 
 Flow workflow is written using a standard paradigm, including the following key parts:
 
-1. **Context Definition**: Use `_FLOW_CONTEXT(flow_name)` to define the workflow context, where workflow data is statically defined
-2. **Initialization Phase**: Use `_FLOW_INIT` to mark initialization code, executed only once
-3. **Release Phase**: Use `_FLOW_FREE(flow_name)` to mark release code, executed when the workflow ends
-4. **Running Logic**: Use `_FLOW_RUN` to mark the main running logic of the workflow
-5. **End Mark**: Use `_FLOW_END` to mark the end of the workflow
+1. **Context Definition**: Use `SL_FLOW_CONTEXT(flow_name)` to define the workflow context, where workflow data is statically defined
+2. **Initialization Phase**: Use `SL_FLOW_INIT` to mark initialization code, executed only once
+3. **Release Phase**: Use `SL_FLOW_FREE(flow_name)` to mark release code, executed when the workflow ends
+4. **Running Logic**: Use `SL_FLOW_RUN` to mark the main running logic of the workflow
+5. **End Mark**: Use `SL_FLOW_END` to mark the end of the workflow
 
 ### Flow Macro Definitions
 
@@ -673,11 +673,11 @@ The Flow framework provides the following core macros:
 | `FLOW_EVENT_DEFINE(event_name)` | Define Flow event variable |
 | `FLOW_START(flow_name)` | Start Flow |
 | `FLOW_STOP(flow_name)` | Stop Flow |
-| `_FLOW_CONTEXT(flow_name)` | Define Flow context |
-| `_FLOW_INIT` | Mark initialization code |
-| `_FLOW_FREE(flow_name)` | Mark release code |
-| `_FLOW_RUN` | Mark running logic |
-| `_FLOW_END` | Mark Flow end |
+| `SL_FLOW_CONTEXT(flow_name)` | Define Flow context |
+| `SL_FLOW_INIT` | Mark initialization code |
+| `SL_FLOW_FREE(flow_name)` | Mark release code |
+| `SL_FLOW_RUN` | Mark running logic |
+| `SL_FLOW_END` | Mark Flow end |
 | `FLOW_UNTIL(condition)` | Wait until condition is met |
 | `FLOW_WAIT(ms)` | Non-blocking wait for specified time |
 | `FLOW_WAIT_EVENT(event_name)` | Wait for event trigger |

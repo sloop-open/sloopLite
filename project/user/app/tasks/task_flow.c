@@ -46,21 +46,21 @@ void task_flow(void)
 void flow_user(void)
 {
     /* 工作流上下文，工作流需要的数据在此静态定义 */
-    _FLOW_CONTEXT(flow_user);
+    SL_FLOW_CONTEXT(flow_user);
 
     /* 初次进入工作流，执行一次，初始化工作流上下文 */
-    _FLOW_INIT;
+    SL_FLOW_INIT;
     sl_printf("user: Open food delivery APP");
 
     /* 工作流结束，不再执行时，释放资源 */
-    _FLOW_FREE(flow_user);
+    SL_FLOW_FREE(flow_user);
     sl_printf("user: Exit");
 
     FLOW_STOP(flow_eat);
     FLOW_STOP(flow_watch);
 
     /* 下方开始进入工作流运行逻辑 */
-    _FLOW_RUN;
+    SL_FLOW_RUN;
 
     /* 下单 */
     sl_printf("user: Place an order");
@@ -75,46 +75,46 @@ void flow_user(void)
     /* 结束示例 */
     sl_goto(task_idle);
 
-    _FLOW_END;
+    SL_FLOW_END;
 }
 
 void flow_watch(void)
 {
     /* 工作流上下文，工作流需要的数据在此静态定义 */
-    _FLOW_CONTEXT(flow_watch);
+    SL_FLOW_CONTEXT(flow_watch);
 
     /* 初次进入工作流，执行一次，初始化工作流上下文 */
-    _FLOW_INIT;
+    SL_FLOW_INIT;
     sl_printf("watch: Start");
 
     /* 工作流结束，不再执行时，释放资源 */
-    _FLOW_FREE(flow_watch);
+    SL_FLOW_FREE(flow_watch);
     sl_printf("watch: Stop");
 
     /* 下方开始进入工作流运行逻辑 */
-    _FLOW_RUN;
+    SL_FLOW_RUN;
 
     sl_printf("user: Watching drama...");
     FLOW_WAIT(1000);
 
-    _FLOW_END;
+    SL_FLOW_END;
 }
 
 void flow_delivery(void)
 {
     /* 工作流上下文，工作流需要的数据在此静态定义 */
-    _FLOW_CONTEXT(flow_delivery);
+    SL_FLOW_CONTEXT(flow_delivery);
 
     /* 初次进入工作流，执行一次，初始化工作流上下文 */
-    _FLOW_INIT;
+    SL_FLOW_INIT;
     sl_printf("delivery: Start");
 
     /* 工作流结束，不再执行时，释放资源 */
-    _FLOW_FREE(flow_delivery);
+    SL_FLOW_FREE(flow_delivery);
     sl_printf("delivery: Stop");
 
     /* 下方开始进入工作流运行逻辑 */
-    _FLOW_RUN;
+    SL_FLOW_RUN;
 
     FLOW_WAIT_EVENT(evt_order);
 
@@ -129,24 +129,24 @@ void flow_delivery(void)
     FLOW_SEND_EVENT(evt_arrive);
     sl_printf("delivery: Delivered");
 
-    _FLOW_END;
+    SL_FLOW_END;
 }
 
 void flow_eat(void)
 {
     /* 工作流上下文，工作流需要的数据在此静态定义 */
-    _FLOW_CONTEXT(flow_eat);
+    SL_FLOW_CONTEXT(flow_eat);
 
     /* 初次进入工作流，执行一次，初始化工作流上下文 */
-    _FLOW_INIT;
+    SL_FLOW_INIT;
     sl_printf("eat: Preparing");
 
     /* 工作流结束，不再执行时，释放资源 */
-    _FLOW_FREE(flow_eat);
+    SL_FLOW_FREE(flow_eat);
     sl_printf("eat: Finish");
 
     /* 下方开始进入工作流运行逻辑 */
-    _FLOW_RUN;
+    SL_FLOW_RUN;
 
     /* 等待外卖送达 */
     FLOW_WAIT_EVENT(evt_arrive);
@@ -160,7 +160,7 @@ void flow_eat(void)
 
     FLOW_EXIT();
 
-    _FLOW_END;
+    SL_FLOW_END;
 }
 
 /************************** END OF FILE **************************/

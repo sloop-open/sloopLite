@@ -127,11 +127,11 @@ void sl_load_new_task(void);
  *  1.Flow 内部不能使用局部变量
     2.flow 内部的用户状态机不能使用flow api,如FLOW_UNTIL
     3.严格遵循 flow 模板
-    _FLOW_CONTEXT(flow_name)
-    _FLOW_INIT
-    _FLOW_FREE(flow_name)
-    _FLOW_RUN
-    _FLOW_END
+    SL_FLOW_CONTEXT(flow_name)
+    SL_FLOW_INIT
+    SL_FLOW_FREE(flow_name)
+    SL_FLOW_RUN
+    SL_FLOW_END
     4.事件是单一消费模型
  */
 
@@ -163,7 +163,7 @@ enum
 #define FLOW_STOP(flow_name) flow_state_##flow_name = FLOW_FREE
 
 /* Flow 内部上下文 */
-#define _FLOW_CONTEXT(flow_name)                  \
+#define SL_FLOW_CONTEXT(flow_name)                  \
     static uint32_t _flow_tick;                   \
     static uint32_t _flow_state;                  \
     static uint32_t _state_backup;                \
@@ -179,7 +179,7 @@ enum
     }
 
 /* 初始化区 */
-#define _FLOW_INIT       \
+#define SL_FLOW_INIT       \
     switch (_flow_state) \
     {                    \
     case FLOW_INIT:      \
@@ -187,7 +187,7 @@ enum
         sl_printf("FLOW_INIT");
 
 /* 清理区 */
-#define _FLOW_FREE(flow_name)    \
+#define SL_FLOW_FREE(flow_name)    \
     _flow_state = FLOW_RUN;      \
     break;                       \
     }                            \
@@ -197,7 +197,7 @@ enum
         sl_printf("FLOW_FREE");
 
 /* 运行区 */
-#define _FLOW_RUN            \
+#define SL_FLOW_RUN            \
     _flow_state = FLOW_INIT; \
     break;                   \
     }                        \
@@ -205,7 +205,7 @@ enum
     {
 
 /* 结束 */
-#define _FLOW_END \
+#define SL_FLOW_END \
     break;        \
     }             \
     }
