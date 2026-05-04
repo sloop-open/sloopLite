@@ -6,9 +6,9 @@ Memory Map of the image
 
   Image Entry point : 0x080000c1
 
-  Load Region LR_IROM1 (Base: 0x08000000, Size: 0x00005d00, Max: 0x00010000, ABSOLUTE)
+  Load Region LR_IROM1 (Base: 0x08000000, Size: 0x00005d08, Max: 0x00010000, ABSOLUTE)
 
-    Execution Region ER_IROM1 (Exec base: 0x08000000, Load base: 0x08000000, Size: 0x00005cf0, Max: 0x00010000, ABSOLUTE)
+    Execution Region ER_IROM1 (Exec base: 0x08000000, Load base: 0x08000000, Size: 0x00005cf8, Max: 0x00010000, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
@@ -122,58 +122,58 @@ Memory Map of the image
     0x08003708   0x08003708   0x0000001c   Code   RO           11    .text.main          main.o
     0x08003724   0x08003724   0x000000b0   Code   RO          624    .text.multiple_run  sloop.o
     0x080037d4   0x080037d4   0x0000001c   Code   RO          610    .text.mutex_task_run  sloop.o
-    0x080037f0   0x080037f0   0x00000084   Code   RO          598    .text.once_task_run  sloop.o
-    0x08003874   0x08003874   0x00000040   Code   RO          612    .text.parallel_task_run  sloop.o
-    0x080038b4   0x080038b4   0x00000204   Code   RO          602    .text.sl_cycle_start  sloop.o
-    0x08003ab8   0x08003ab8   0x000000ec   Code   RO          628    .text.sl_cycle_stop  sloop.o
-    0x08003ba4   0x08003ba4   0x0000000c   Code   RO          594    .text.sl_get_tick   sloop.o
-    0x08003bb0   0x08003bb0   0x000000f4   Code   RO          642    .text.sl_goto       sloop.o
-    0x08003ca4   0x08003ca4   0x00000014   Code   RO          646    .text.sl_load_new_task  sloop.o
-    0x08003cb8   0x08003cb8   0x000001d0   Code   RO          616    .text.sl_task_once  sloop.o
-    0x08003e88   0x08003e88   0x000001ac   Code   RO          596    .text.sl_task_start  sloop.o
-    0x08004034   0x08004034   0x000000e8   Code   RO          640    .text.sl_task_stop  sloop.o
-    0x0800411c   0x0800411c   0x0000001c   Code   RO          614    .text.sl_tick_irq   sloop.o
-    0x08004138   0x08004138   0x000000b0   Code   RO          644    .text.sl_wait_break  sloop.o
-    0x080041e8   0x080041e8   0x0000000c   Code   RO          608    .text.sloop         sloop.o
-    0x080041f4   0x080041f4   0x0000026c   Code   RO          592    .text.sloop_init    sloop.o
-    0x08004460   0x08004460   0x00000010   Code   RO          618    .text.soft_timer    sloop.o
-    0x08004470   0x08004470   0x000000c8   Code   RO          606    .text.system_heartbeat  sloop.o
-    0x08004538   0x08004538   0x00000170   Code   RO          521    .text.task_baseInit  task_baseinit.o
-    0x080046a8   0x080046a8   0x000001b0   Code   RO          553    .text.task_flow     task_flow.o
-    0x08004858   0x08004858   0x00000178   Code   RO          544    .text.task_idle     task_idle.o
-    0x080049d0   0x080049d0   0x00000090   Code   RO          620    .text.timeout_run   sloop.o
-    0x08004a60   0x08004a60   0x00000040   Data   RO          495    .rodata.AHBPrescTable  system_stm32g0xx.o
-    0x08004aa0   0x08004aa0   0x00000011   Data   RO          764    .rodata._DoInit._aInitStr  segger_rtt.o
-    0x08004ab1   0x08004ab1   0x00000010   Data   RO          786    .rodata._PrintUnsigned._aV2C  segger_rtt_printf.o
-    0x08004ac1   0x08004ac1   0x00000010   Data   RO          762    .rodata._aTerminalId  segger_rtt.o
-    0x08004ad1   0x08004ad1   0x00000392   Data   RO           43    .rodata.str1.1      stm32g0xx_it.o
-    0x08004e63   0x08004e63   0x000000a3   Data   RO          523    .rodata.str1.1      task_baseinit.o
-    0x08004f06   0x08004f06   0x0000000a   Data   RO          546    .rodata.str1.1      task_idle.o
-    0x08004f10   0x08004f10   0x0000065f   Data   RO          563    .rodata.str1.1      task_flow.o
-    0x0800556f   0x0800556f   0x00000751   Data   RO          656    .rodata.str1.1      sloop.o
-    0x08005cc0   0x08005cc0   0x00000009   Data   RO          765    .rodata.str1.1      segger_rtt.o
-    0x08005cc9   0x08005cc9   0x00000007   Data   RO          785    .rodata.str1.1      segger_rtt_printf.o
-    0x08005cd0   0x08005cd0   0x00000020   Data   RO          985    Region$$Table       anon$$obj.o
+    0x080037f0   0x080037f0   0x0000008c   Code   RO          598    .text.once_task_run  sloop.o
+    0x0800387c   0x0800387c   0x00000040   Code   RO          612    .text.parallel_task_run  sloop.o
+    0x080038bc   0x080038bc   0x00000204   Code   RO          602    .text.sl_cycle_start  sloop.o
+    0x08003ac0   0x08003ac0   0x000000ec   Code   RO          628    .text.sl_cycle_stop  sloop.o
+    0x08003bac   0x08003bac   0x0000000c   Code   RO          594    .text.sl_get_tick   sloop.o
+    0x08003bb8   0x08003bb8   0x000000f4   Code   RO          642    .text.sl_goto       sloop.o
+    0x08003cac   0x08003cac   0x00000014   Code   RO          646    .text.sl_load_new_task  sloop.o
+    0x08003cc0   0x08003cc0   0x000001d0   Code   RO          616    .text.sl_task_once  sloop.o
+    0x08003e90   0x08003e90   0x000001ac   Code   RO          596    .text.sl_task_start  sloop.o
+    0x0800403c   0x0800403c   0x000000e8   Code   RO          640    .text.sl_task_stop  sloop.o
+    0x08004124   0x08004124   0x0000001c   Code   RO          614    .text.sl_tick_irq   sloop.o
+    0x08004140   0x08004140   0x000000b0   Code   RO          644    .text.sl_wait_break  sloop.o
+    0x080041f0   0x080041f0   0x0000000c   Code   RO          608    .text.sloop         sloop.o
+    0x080041fc   0x080041fc   0x0000026c   Code   RO          592    .text.sloop_init    sloop.o
+    0x08004468   0x08004468   0x00000010   Code   RO          618    .text.soft_timer    sloop.o
+    0x08004478   0x08004478   0x000000c8   Code   RO          606    .text.system_heartbeat  sloop.o
+    0x08004540   0x08004540   0x00000170   Code   RO          521    .text.task_baseInit  task_baseinit.o
+    0x080046b0   0x080046b0   0x000001b0   Code   RO          553    .text.task_flow     task_flow.o
+    0x08004860   0x08004860   0x00000178   Code   RO          544    .text.task_idle     task_idle.o
+    0x080049d8   0x080049d8   0x00000090   Code   RO          620    .text.timeout_run   sloop.o
+    0x08004a68   0x08004a68   0x00000040   Data   RO          495    .rodata.AHBPrescTable  system_stm32g0xx.o
+    0x08004aa8   0x08004aa8   0x00000011   Data   RO          764    .rodata._DoInit._aInitStr  segger_rtt.o
+    0x08004ab9   0x08004ab9   0x00000010   Data   RO          786    .rodata._PrintUnsigned._aV2C  segger_rtt_printf.o
+    0x08004ac9   0x08004ac9   0x00000010   Data   RO          762    .rodata._aTerminalId  segger_rtt.o
+    0x08004ad9   0x08004ad9   0x00000392   Data   RO           43    .rodata.str1.1      stm32g0xx_it.o
+    0x08004e6b   0x08004e6b   0x000000a3   Data   RO          523    .rodata.str1.1      task_baseinit.o
+    0x08004f0e   0x08004f0e   0x0000000a   Data   RO          546    .rodata.str1.1      task_idle.o
+    0x08004f18   0x08004f18   0x0000065f   Data   RO          563    .rodata.str1.1      task_flow.o
+    0x08005577   0x08005577   0x00000751   Data   RO          656    .rodata.str1.1      sloop.o
+    0x08005cc8   0x08005cc8   0x00000009   Data   RO          765    .rodata.str1.1      segger_rtt.o
+    0x08005cd1   0x08005cd1   0x00000007   Data   RO          785    .rodata.str1.1      segger_rtt_printf.o
+    0x08005cd8   0x08005cd8   0x00000020   Data   RO          985    Region$$Table       anon$$obj.o
 
 
-    Execution Region RW_IRAM1 (Exec base: 0x20000000, Load base: 0x08005cf0, Size: 0x00001340, Max: 0x00002000, ABSOLUTE)
+    Execution Region RW_IRAM1 (Exec base: 0x20000000, Load base: 0x08005cf8, Size: 0x00001340, Max: 0x00002000, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
-    0x20000000   0x08005cf0   0x00000004   Data   RW          494    .data.SystemCoreClock  system_stm32g0xx.o
-    0x20000004   0x08005cf4   0x00000001   Data   RW          456    .data.uwTickFreq    stm32g0xx_hal.o
-    0x20000005   0x08005cf5   0x00000003   PAD
-    0x20000008   0x08005cf8   0x00000004   Data   RW          455    .data.uwTickPrio    stm32g0xx_hal.o
-    0x2000000c   0x08005cfc   0x00000004   PAD
+    0x20000000   0x08005cf8   0x00000004   Data   RW          494    .data.SystemCoreClock  system_stm32g0xx.o
+    0x20000004   0x08005cfc   0x00000001   Data   RW          456    .data.uwTickFreq    stm32g0xx_hal.o
+    0x20000005   0x08005cfd   0x00000003   PAD
+    0x20000008   0x08005d00   0x00000004   Data   RW          455    .data.uwTickPrio    stm32g0xx_hal.o
+    0x2000000c   0x08005d04   0x00000004   PAD
     0x20000010        -       0x00000060   Zero   RW          849    .bss                c_p.l(libspace.o)
     0x20000070        -       0x00000001   Zero   RW          763    .bss._ActiveTerminal  segger_rtt.o
-    0x20000071   0x08005cfc   0x00000003   PAD
+    0x20000071   0x08005d04   0x00000003   PAD
     0x20000074        -       0x00000048   Zero   RW          761    .bss._SEGGER_RTT    segger_rtt.o
     0x200000bc        -       0x00000010   Zero   RW          767    .bss._acDownBuffer  segger_rtt.o
     0x200000cc        -       0x00000800   Zero   RW          766    .bss._acUpBuffer    segger_rtt.o
     0x200008cc        -       0x00000001   Zero   RW          678    .bss.break_wait     sloop.o
     0x200008cd        -       0x00000001   Zero   RW          660    .bss.calcul_cpu_load.warning  sloop.o
-    0x200008ce   0x08005cfc   0x00000002   PAD
+    0x200008ce   0x08005d04   0x00000002   PAD
     0x200008d0        -       0x000000c0   Zero   RW          666    .bss.cycle_reg      sloop.o
     0x20000990        -       0x000000c0   Zero   RW          665    .bss.cycle_run.backup_reg  sloop.o
     0x20000a50        -       0x00000004   Zero   RW          577    .bss.flow_delivery._flow_state  task_flow.o
@@ -185,7 +185,7 @@ Memory Map of the image
     0x20000a68        -       0x00000001   Zero   RW          579    .bss.flow_event_evt_arrive  task_flow.o
     0x20000a69        -       0x00000001   Zero   RW          572    .bss.flow_event_evt_eat  task_flow.o
     0x20000a6a        -       0x00000001   Zero   RW          571    .bss.flow_event_evt_order  task_flow.o
-    0x20000a6b   0x08005cfc   0x00000001   PAD
+    0x20000a6b   0x08005d04   0x00000001   PAD
     0x20000a6c        -       0x00000004   Zero   RW          565    .bss.flow_state_flow_delivery  task_flow.o
     0x20000a70        -       0x00000004   Zero   RW          569    .bss.flow_state_flow_eat  task_flow.o
     0x20000a74        -       0x00000004   Zero   RW          564    .bss.flow_state_flow_user  task_flow.o
@@ -206,7 +206,7 @@ Memory Map of the image
     0x20000d20        -       0x00000004   Zero   RW          674    .bss.run_task       sloop.o
     0x20000d24        -       0x00000001   Zero   RW          677    .bss.sl_free        sloop.o
     0x20000d25        -       0x00000001   Zero   RW          675    .bss.sl_init        sloop.o
-    0x20000d26   0x08005cfc   0x00000002   PAD
+    0x20000d26   0x08005d04   0x00000002   PAD
     0x20000d28        -       0x00000004   Zero   RW          672    .bss.soft_timer_count  sloop.o
     0x20000d2c        -       0x00000004   Zero   RW          658    .bss.system_heartbeat.count  sloop.o
     0x20000d30        -       0x00000080   Zero   RW          669    .bss.task_reg       sloop.o
@@ -215,7 +215,7 @@ Memory Map of the image
     0x20000e74        -       0x000000c0   Zero   RW          663    .bss.timeout_run.backup_reg  sloop.o
     0x20000f34        -       0x00000004   Zero   RW          457    .bss.uwTick         stm32g0xx_hal.o
     0x20000f38        -       0x00000001   Zero   RW          673    .bss.wait           sloop.o
-    0x20000f39   0x08005cfc   0x00000007   PAD
+    0x20000f39   0x08005d04   0x00000007   PAD
     0x20000f40        -       0x00000000   Zero   RW            2    HEAP                startup_stm32g030xx.o
     0x20000f40        -       0x00000400   Zero   RW            1    STACK               startup_stm32g030xx.o
 
@@ -232,7 +232,7 @@ Image component sizes
        168          0          0          0          0       1626   main.o
        998         32         42          0       2137      13980   segger_rtt.o
       1946         64         23          0          0       4009   segger_rtt_printf.o
-      4280        268       1873          0       1573       8639   sloop.o
+      4288        268       1873          0       1573       8641   sloop.o
         52         22        192          0       1024        604   startup_stm32g030xx.o
        208          8          0          5          4       6421   stm32g0xx_hal.o
        256         20          0          0          0       6296   stm32g0xx_hal_cortex.o
@@ -246,7 +246,7 @@ Image component sizes
        376         20         10          0          0        571   task_idle.o
 
     ----------------------------------------------------------------------
-     17934       1034       4944         12       4820      64839   Object Totals
+     17942       1034       4944         12       4820      64841   Object Totals
          0          0         32          0          0          0   (incl. Generated)
          0          0          0          3         19          0   (incl. Padding)
 
@@ -298,15 +298,15 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-     18848       1056       4944         12       4916      65215   Grand Totals
-     18848       1056       4944         12       4916      65215   ELF Image Totals
-     18848       1056       4944         12          0          0   ROM Totals
+     18856       1056       4944         12       4916      65217   Grand Totals
+     18856       1056       4944         12       4916      65217   ELF Image Totals
+     18856       1056       4944         12          0          0   ROM Totals
 
 ==============================================================================
 
-    Total RO  Size (Code + RO Data)                23792 (  23.23kB)
+    Total RO  Size (Code + RO Data)                23800 (  23.24kB)
     Total RW  Size (RW Data + ZI Data)              4928 (   4.81kB)
-    Total ROM Size (Code + RO Data + RW Data)      23804 (  23.25kB)
+    Total ROM Size (Code + RO Data + RW Data)      23812 (  23.25kB)
 
 ==============================================================================
 

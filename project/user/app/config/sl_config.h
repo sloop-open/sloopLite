@@ -30,6 +30,9 @@
 /* 启用RTT打印 */
 #define SL_RTT_ENABLE 1
 
+/* RTT 打印缓冲区大小 */
+#define SL_RTT_BUFFER_SIZE 2048
+
 #endif /* __sl_config_H */
 
 /************************** END OF FILE **************************/

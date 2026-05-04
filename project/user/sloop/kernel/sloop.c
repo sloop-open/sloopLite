@@ -602,8 +602,12 @@ void once_task_run(void)
 {
     static pfunc backup_reg[SL_ONCE_LIMIT];
 
+    __disable_irq();
+
     /* 防止回调中改写注册表 */
     memcpy(backup_reg, once_task_reg, sizeof backup_reg);
+
+    __enable_irq();
 
     for (int i = 0; i < SL_ONCE_LIMIT; i++)
     {
